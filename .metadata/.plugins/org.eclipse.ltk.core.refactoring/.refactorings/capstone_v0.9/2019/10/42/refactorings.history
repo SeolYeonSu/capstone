@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;boardWrite.jsp&apos; to &apos;sample&apos;&#x0D;&#x0A;- Original project: &apos;capstone&apos;&#x0D;&#x0A;- Destination element: &apos;sample&apos;&#x0D;&#x0A;- Original element: &apos;boardWrite.jsp&apos;" description="Copy file" element1="WebContent/WEB-INF/views/sample/boardWrite.jsp" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1571019422224" target="/capstone/WebContent/WEB-INF/views/sample" units="0" version="1.0"/>
+</session>

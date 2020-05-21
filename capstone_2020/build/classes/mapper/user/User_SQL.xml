@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+						"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+<select id="selectUserID" parameterType="HashMap" resultType="HashMap">
+  <![CDATA[
+   SELECT
+    COUNT(ID) AS RESULT 
+   FROM USER_INFO 
+   WHERE 
+    ID = #{ID} 
+  ]]>
+ </select>
+ <insert id="insertUserData" parameterType="HashMap">
+  <![CDATA[
+   INSERT INTO USER_INFO 
+   (
+   ID,
+   PASSWORD, 
+    NAME, 
+    TEL
+    ) 
+   VALUES 
+   (
+    #{ID}, 
+    #{PASSWORD},
+    #{NAME}, 
+    #{TEL}
+   )
+  ]]>
+ </insert>
+ <select id="selectUserInfo" parameterType="HashMap" resultType="HashMap">
+  /* 로그인 - 사용자 정보 조회 */
+  <![CDATA[
+   SELECT 
+    ID,
+    ACC
+   FROM USER_INFO 
+   WHERE 
+    ID = #{ID}
+   and
+    PASSWORD = #{PASSWORD}
+  ]]>
+ </select>
+ 
+</mapper>

@@ -1,0 +1,88 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<%@ include file="header.jsp" %>
+<meta charset="UTF-8">
+<title>영추사 - 영화를 추천하는 사람들</title>
+<style>
+
+.section-img{
+    background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-image:url('https://cdn.pixabay.com/photo/2015/09/02/12/45/movie-918655_960_720.jpg');
+}
+.hero{
+	width: 980px;
+}
+.img-auto{
+      width: auto; height: auto;
+      max-width: 200px;
+      max-height: 150px;
+    }
+.sub{
+	text-shadow: -1px 0 black,0 1px black,1px 0 black,0 -1px black;
+}
+
+</style>
+</head>
+<body class="body-set">
+<div class="col-lg-12 section-img" style="height: 430px;">
+		
+		<h3 style="color:white; padding-top:300px" class="text-center sub">
+			영화를 추천해 주는 사람들
+		</h3>
+		<h3 style="color:white" class="text-center sub">
+			영추사에 오신걸 환영합니다.
+		</h3>	
+</div>
+
+
+<div class="col-lg-12 text-center thumbnail">
+		<div class="col-lg-4" style="padding-top:50px" >
+			<div>
+				<img class="img-auto" src="https://cdn.pixabay.com/photo/2017/06/10/07/21/chat-2389223_960_720.png"><br/>
+				communication
+			</div>
+			<hr style="width:200px;">
+			<div>
+				자유게시판, 댓글 기능으로 <br/>유저들 간의 원활한 소통을<br/> 할 수 있게 합니다.
+			</div>
+		</div>
+		<div class="col-lg-4" style="padding-top:50px">
+			<div>
+				<img class="img-auto" src="https://cdn.pixabay.com/photo/2013/07/12/19/16/newspaper-154444_960_720.png"><br/>
+				news
+			</div>
+			<hr style="width:200px;">
+			<div>
+				영화의 소식을 '영추사'에서<br/> 자료를 수집 및 분석하여<br/> 신속하게 제공합니다.
+			</div>
+		</div>
+		<div class="col-lg-4" style="padding-top:50px">
+			<div>
+				<img class="img-auto" src="https://cdn.pixabay.com/photo/2017/04/02/04/59/like-2195024_960_720.png"><br/>
+				recommendation
+			</div>
+			<hr style="width:200px;">
+			<div>
+				협업 필터링을 통한 <br/>유저들 간의 영화 평점 점수를 바탕으로<br/> 추천 서비스를 제공합니다. 
+			</div>
+		</div>
+</div>
+
+
+<!-- Footer -->
+  <footer class="foot col-lg-12">
+    <div class="container"style="padding-top:50px">
+      <hr>
+      <p class="text-center">Copyright &copy; Inhatc Capstone by YCS. 2019</p>
+    </div>
+  </footer>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>
