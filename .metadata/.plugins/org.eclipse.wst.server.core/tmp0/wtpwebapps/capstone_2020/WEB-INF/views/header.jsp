@@ -191,7 +191,7 @@
 		
 		function fn_admin() {
 			var comSubmit = new ComSubmit("frm");
-			comSubmit.setUrl("<c:url value='/bbs/openAdmin.do' />");
+			comSubmit.setUrl("<c:url value='/admin/openAdmin.do' />");
 		    comSubmit.submit();
 		}
 	</script>
@@ -199,6 +199,9 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 		crossorigin="anonymous"></script>
+
+		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/bootstrap.js"></script>
 

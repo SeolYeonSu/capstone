@@ -1,0 +1,12 @@
+package inhatc.capstone.admin.service;
+
+import java.util.List;
+import java.util.Map;
+
+public interface AdminService {
+
+	List<Map<String, Object>> selectReportList(Map<String, Object> map) throws Exception;
+	List<Map<String, Object>> selectUserList(Map<String, Object> map) throws Exception;
+	
+	
+}

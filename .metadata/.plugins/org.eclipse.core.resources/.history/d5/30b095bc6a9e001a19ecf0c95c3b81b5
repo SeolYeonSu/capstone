@@ -1,0 +1,28 @@
+package inhatc.capstone.admin.service;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
+
+import inhatc.capstone.admin.dao.AdminDAO;
+
+
+@Service("adminService")
+public class AdminServiceImpl implements AdminService{
+	Logger log = Logger.getLogger(this.getClass());
+	
+	@Resource(name="adminDAO")
+	private AdminDAO adminDAO; //bean을 수동으로 작성한 예
+	
+	@Override
+	public List<Map<String, Object>> selectReportList(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		return adminDAO.selectReportList(map);
+	}
+	
+	
+
+}

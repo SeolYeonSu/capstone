@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+						"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="admin">
+	<insert id="reportBoard" parameterType="hashmap">
+    <![CDATA[
+        INSERT INTO report
+	        (
+			    rp_id,
+			    rp_date,
+			    rp_reason,
+			    rp_type,
+			    rp_idx,
+			    rp_rid,
+			    rp_check
+	        )
+	        VALUES
+	        (
+	            #{ID},
+	            now(),
+	            #{REASON},
+	            'free',
+	            #{IDX},
+	            #{CREA_ID},
+	            0
+	        )
+    ]]>
+	</insert>
+	
+	<select id="reportCheck" parameterType="hashmap" resultType="hashmap">
+	    <![CDATA[
+	        SELECT
+	           count(*) AS RESULT
+	        FROM
+	            report
+	        WHERE
+	        	rp_id = #{ID} and
+	            rp_idx = #{IDX} and
+	            rp_type = #{TYPE}
+	                   
+	    ]]>
+	</select>
+	
+</mapper>

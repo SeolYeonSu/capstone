@@ -1,0 +1,12 @@
+1590382926780	Rename package 'mapper.admin'
+1590383107814	Copy file
+1590383274151	Copy packages
+1590383312587	Rename package 'inhatc.capstone.sample.controller.copy'
+1590383326998	Rename package 'inhatc.capstone.sample.dao.copy'
+1590383338435	Rename package 'inhatc.capstone.sample.service.copy'
+1590383416238	Move 'admin.jsp' to 'admin'
+1590383484185	Rename type 'SampleDAO'
+1590383495079	Rename type 'SampleService'
+1590383502221	Rename type 'SampleServiceImpl'
+1590383513514	Rename type 'SampleController'
+1590383659230	Rename package 'mapper.report'

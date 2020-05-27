@@ -1,0 +1,261 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<%@ include file="../header.jsp" %>
+</head>
+<body class="body-set">
+<div class="container col-lg-12 col-xs-12">
+<div class="row">
+	<div role="tabpanel">
+	  <!-- Nav tabs -->
+	  <ul class="nav nav-tabs" role="tablist">
+	    <li role="presentation" class="active"><a href="#waiting" aria-controls="waiting" role="tab" data-toggle="tab">신고처리 대기</a></li>
+	    <li role="presentation"><a href="#complete" aria-controls="complete" role="tab" data-toggle="tab">신고처리 완료</a></li>
+	    <li role="presentation"><a href="#log" aria-controls="log" role="tab" data-toggle="tab">로그 기록</a></li>
+	  </ul>
+	  
+	  <!-- Tab panes -->
+	  <div class="tab-content">
+		  <div role="tabpanel" class="tab-pane fade in active" id="waiting">
+		  	<table class="table table-hover" style="text-align:left; border:1px solid #dddddd; margin-top:20px;"> 
+				<thead>
+					<tr>
+						<th style="background-color: #eeeeee; text-align: center; width: 20%;">신고된 아이디</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 20%;">신고 사유</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 20%;">최초 신고일</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 20%;">신고 횟수</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 20%;"></th>
+					</tr>
+				</thead>
+				<tbody>
+				<c:choose>
+			    <c:when test="${fn:length(list) > 0 }">
+			    	<c:forEach items="${list}" var="row">
+						<tr>
+							<td style="text-align: center;"><h5>
+								<c:out value="${row.RP_RID }"></c:out></h5>
+							</td>
+							<td style="text-align: center;"><h5>
+								<c:out value="${row.RP_REASON}"></c:out></h5>
+							</td>
+							<td style="text-align: center;"><h5>
+							 	<c:out value="${row.RP_DATE }"></c:out></h5>
+							</td>
+							<td style="text-align: center;"><h5>
+							 	<c:out value="${row.C }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+							 	<button type="button" class="btn btn-success"
+							 	 data-toggle="modal" data-target=".bs-reporting-modal">처리하기</button>
+								<button type="button" name="userList" class="btn btn-info">신고자 목록</button>
+								<!--  data-toggle="modal" data-target=".bs-list-modal-sm"-->
+								
+								<input type="hidden" id="RP_IDX" name="RP_IDX" value="${row.RP_IDX}"> 	
+							</td>
+						</tr>
+					</c:forEach>
+				</c:when>
+				
+				<c:otherwise>
+					<tr>
+						<td colspan="6" style="text-align: center;">조회된 결과가 없습니다.</td>
+					</tr>
+				</c:otherwise>
+				</c:choose>
+				</tbody>
+			</table>
+			
+			<!-- 신고 처리 모달  -->
+			<div class="modal fade bs-reporting-modal" id="reportingModal" tabindex="-1" role="dialog" aria-labelledby="reportingModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="reportingModalLabel">신고 처리</h4>
+			      </div>
+			      
+			      <div class="modal-body" id="reportingModalBody" style="height: 430px;">
+			      	<div>
+			      		<textarea class="form-control" placeholder="글 내용" id="CONTENTS" name="CONTENTS" maxlength="2048" style="height: 350px;"></textarea>
+			      	</div>
+			      	<div style="height:10px;"></div>
+			      	<div>
+			      		<div class="col-md-3"><h5>삭제여부</h5></div>
+			      		<div class="col-md-3"><input type="checkbox"></div>
+			      		<div class="col-md-3"><h5>활동정지</h5> </div>
+			      		<div class="col-md-3">
+			      			<select class="form-control" style="width:100px; height:31px;">
+			      				<option>없음</option>
+								<option>3일</option>
+								<option>7일</option>
+								<option>15일</option>
+								<option>30일</option>
+								<option>영구</option>
+							</select>
+						</div>		      		
+			      	</div>
+			      </div>
+			      <div class="modal-footer">
+			       	<button type="button" class="btn btn-success">처리하기</button>
+			      </div>
+			    </div>
+			  </div>
+			 </div>
+			<!-- 신고자 처리 모달 끝 -->
+			
+			<!-- 신고자 목록 모달  -->
+			<div class="modal fade bs-list-modal-sm" id="userListModal" tabindex="-1" role="dialog" aria-labelledby="userListModalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-sm">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="userListModalLabel">신고자 목록</h4>
+			      </div>
+			      
+			      <div class="modal-body" id="userListModalBody">
+			      	
+			      </div>
+			      
+			      <div class="modal-footer">
+			       	<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+			      </div>
+			    </div>
+			  </div>
+			 </div>
+			<!-- 신고자 목록 모달 끝 -->
+		  </div>
+		  
+		  <div role="tabpanel" class="tab-pane fade" id="complete">
+		  	<table class="table table-hover" style="text-align:left; border:1px solid #dddddd; margin-top:20px;"> 
+				<!-- <thead>
+					<tr>
+						<th style="background-color: #eeeeee; text-align: center; width: 13%;">번호</th>
+						<th style="background-color: #eeeeee; text-align: left; width: *;">제목</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">조회수</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">작성일</th>
+					</tr>
+				</thead> -->
+				<tbody>
+				<c:choose>
+			    <c:when test="${fn:length(userBoardList) > 0 }">
+			    	<c:forEach items="${userBoardList}" var="row">
+						<tr>
+							<td style="text-align: center;">
+								<c:out value="${row.IDX }"></c:out>
+							</td>
+							<td>
+								<a href="#" name="title"><c:out value="${row.TITLE}"></c:out></a>
+								<input type="hidden" id="IDX" value="${row.IDX }">
+							</td>
+							<td style="text-align: center;">
+							 	<c:out value="${row.HIT_CNT }"></c:out>
+							</td>
+							<td style="text-align: center;">
+							 	<c:out value="${row.CREA_DTM }"></c:out>
+							</td>
+						</tr>
+					</c:forEach>
+				</c:when>
+				
+				<c:otherwise>
+					<tr>
+						<td colspan="6" style="text-align: center;">조회된 결과가 없습니다.</td>
+					</tr>
+				</c:otherwise>
+				</c:choose>
+				</tbody>
+			</table>
+		  </div>
+		  
+		  <div role="tabpanel" class="tab-pane fade" id="log">
+		  	<table class="table table-hover" style="text-align:left; border:1px solid #dddddd; margin-top:20px;"> 
+				<!-- <thead>
+					<tr>
+						<th style="background-color: #eeeeee; text-align: center; width: 13%;">번호</th>
+						<th style="background-color: #eeeeee; text-align: left; width: *;">제목</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">조회수</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">작성일</th>
+					</tr>
+				</thead> -->
+				<tbody>
+				<c:choose>
+			    <c:when test="${fn:length(userBoardList) > 0 }">
+			    	<c:forEach items="${userBoardList}" var="row">
+						<tr>
+							<td style="text-align: center;">
+								<c:out value="${row.IDX }"></c:out>
+							</td>
+							<td>
+								<a href="#" name="title"><c:out value="${row.TITLE}"></c:out></a>
+								<input type="hidden" id="IDX" value="${row.IDX }">
+							</td>
+							<td style="text-align: center;">
+							 	<c:out value="${row.HIT_CNT }"></c:out>
+							</td>
+							<td style="text-align: center;">
+							 	<c:out value="${row.CREA_DTM }"></c:out>
+							</td>
+						</tr>
+					</c:forEach>
+				</c:when>
+				
+				<c:otherwise>
+					<tr>
+						<td colspan="6" style="text-align: center;">조회된 결과가 없습니다.</td>
+					</tr>
+				</c:otherwise>
+				</c:choose>
+				</tbody>
+			</table>
+		  </div>
+		  
+		</div>
+	</div>
+</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() { 
+	 $('[name="userList"]').unbind("click").click(function(e) {
+		   e.preventDefault();
+		   fn_openUserList($(this));    
+	  });
+});
+
+function fn_openUserList(obj) {
+	
+	var idx = obj.parent().find("#RP_IDX").val()
+	var listData = {"IDX": idx};
+	var userlist;
+
+	 $.ajax({
+	  async:false,
+	  type : "POST", 
+	  url : "${pageContext.request.contextPath}/admin/openUserList.do", 
+	  data : listData,
+	  dataType : "json",
+	  error : function(error) {
+		    alert("서버가 응답하지 않습니다. \n다시 시도해주시기 바랍니다.");
+		   },
+	  success : function(data) {
+		  var text ="";
+		  $.each(data, function() {
+			  var rp_id = this.RP_ID;
+			  text += "<h4>" + rp_id + "</h4>";
+			});
+
+		  $("#userListModalBody").empty();
+	  	  $("#userListModalBody").append(text);
+	   	  $('#userListModal').modal('show');
+	  }  
+	 });
+
+}
+</script>
+
+</body>
+</html>

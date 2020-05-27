@@ -5,4 +5,6 @@
 <fullyQualifiedTypeName name="java.util.Calendar"/>
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ResponseBody"/>
 <fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="inhatc.capstone.admin.service.AdminService"/>
+<fullyQualifiedTypeName name="inhatc.capstone.admin.dao.AdminDAO"/>
 </qualifiedTypeNameHistroy>

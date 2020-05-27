@@ -81,6 +81,8 @@ C:\Users\dustn\capstone-workspace\workspace\capstone_ycs\.metadata\.plugins\org.
 \capstone_2020\src
 C:\OOAD\capstone_ycs\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\777938244.index
 \capstone_2019_v1\src
+C:\Users\dustn\capstone-workspace\workspace\capstone_ycs\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2726744159.index
+\capstone_2020\src
 C:\OOAD\capstone_ycs\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\3153150018.index
 \capstone_2019_v1\src
 C:\OOAD\capstone_ycs\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\3396361122.index
