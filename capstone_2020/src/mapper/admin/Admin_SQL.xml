@@ -22,6 +22,23 @@
         ]]>
     </select>
     
+    <select id="selectRpComList" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT
+            	RPC_INDEX,
+            	RPC_IDX,
+            	RPC_ID,
+            	RPC_DATE,
+            	RPC_ADMIN,
+            	RPC_DELETE,
+            	RPC_STOP
+			FROM
+				RPCOMPLETED
+			ORDER BY 
+				RPC_INDEX DESC
+        ]]>
+    </select>
+    
     <select id="selectUserList" parameterType="hashmap" resultType="hashmap">
         <![CDATA[
             SELECT
@@ -32,5 +49,59 @@
 				RP_IDX = #{IDX}
         ]]>
     </select>
+    
+    <select id="selectReportBoard" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT 
+            	TITLE, CONTENTS
+			FROM 
+				TB_BOARD
+			WHERE 
+				IDX = #{IDX}
+        ]]>
+    </select>
+	
+	<update id="updateReport" parameterType="hashmap">
+    <![CDATA[
+        UPDATE REPORT
+        SET
+            RP_CHECK = 1
+        WHERE
+            RP_IDX = #{IDX}
+    ]]>
+	</update>
+	
+	<update id="deleteBoard" parameterType="hashmap">
+    <![CDATA[
+        UPDATE TB_BOARD
+        SET
+            DEL_GB = 'Y'
+        WHERE
+            IDX = #{IDX}
+    ]]>
+	</update>
+	
+	<insert id="insertRpCompleted" parameterType="hashmap">
+    <![CDATA[
+        INSERT INTO RPCOMPLETED
+	        (
+			    RPC_IDX,
+			    RPC_ID,
+			    RPC_DATE,
+			    RPC_ADMIN,
+			    RPC_DELETE,
+			    RPC_STOP
+	        )
+	        VALUES
+	        (
+	            #{IDX},
+	            #{ID},
+	            now(),
+	            #{ADMINID},
+	            #{CHECKDELETE},
+	            #{CHECKSTOP}
+	        )
+    ]]>
+	</insert>
 	
 </mapper>

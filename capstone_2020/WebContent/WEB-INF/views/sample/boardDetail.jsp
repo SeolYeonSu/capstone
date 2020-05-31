@@ -184,35 +184,6 @@
    comSubmit.submit();
   }
   
- /* function fn_reportCheck() {
-	 var userId = $("#user_id").val();
-	 var idx = $("#IDX").val();
-	 var type = "free";
-	 var reportData = {"ID": userId, "IDX": idx, "TYPE": type};
-
-	  $.ajax({
-	   async:false,
-	   type : "POST", 
-	   url : "${pageContext.request.contextPath}/bbs/reportCheck.do", 
-	   data : reportData,
-	   dataType : "json",
-	   error : function(error) {
-		    alert("서버가 응답하지 않습니다. \n다시 시도해주시기 바랍니다.");
-		   },
-	   success : function(result) {
-	    	if(result == 0) {
-	    		//fn_reportBoard();
-	    		alert("성공 테스트");
-	    	}
-	    	else {
-	    		//alert("이미 신고하였습니다.");
-	    		alert("실패 테스트.");
-	    	}	
-	  	}
-	  });
-  }*/
-
-  
 </script>
 </body>
 </html>

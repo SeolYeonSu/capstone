@@ -37,28 +37,27 @@
 			    <c:when test="${fn:length(list) > 0 }">
 			    	<c:forEach items="${list}" var="row">
 						<tr>
-							<td style="text-align: center;"><h5>
-								<c:out value="${row.RP_IDX }"></c:out></h5>
-							</td>
-							<td style="text-align: center;"><h5>
-								<c:out value="${row.RP_RID }"></c:out></h5>
-							</td>
-							<td style="text-align: center;"><h5>
-								<c:out value="${row.RP_REASON}"></c:out></h5>
-							</td>
-							<td style="text-align: center;"><h5>
-							 	<c:out value="${row.RP_DATE }"></c:out></h5>
-							</td>
-							<td style="text-align: center;"><h5>
-							 	<c:out value="${row.C }"></c:out></h5>
+							<td style="text-align: center;">
+								<h5><c:out value="${row.RP_IDX }"></c:out></h5>
 							</td>
 							<td style="text-align: center;">
-							 	<button type="button" class="btn btn-success"
-							 	 data-toggle="modal" data-target=".bs-reporting-modal">처리하기</button>
-								<button type="button" name="userList" class="btn btn-info">신고자 목록</button>
-								<!--  data-toggle="modal" data-target=".bs-list-modal-sm"-->
-								
-								<input type="hidden" id="RP_IDX" name="RP_IDX" value="${row.RP_IDX}"> 	
+								<h5><c:out value="${row.RP_RID }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<h5><c:out value="${row.RP_REASON}"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+							 	<h5><c:out value="${row.RP_DATE }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+							 	<h5><c:out value="${row.C }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+							 	<button type="button" name="reportBoard" class="btn btn-success">처리하기</button>
+								<button type="button" name="userList" class="btn btn-info">신고자 목록</button>				
+								<input type="hidden" id="RP_IDX" name="RP_IDX" value="${row.RP_IDX}">
+								<input type="hidden" id="RP_RID" name="RP_RID" value="${row.RP_RID}">
+								<input type="hidden" id="adminId" name="adminId" value="${loginInfo.ID}">
 							</td>
 						</tr>
 					</c:forEach>
@@ -74,25 +73,24 @@
 			</table>
 			
 			<!-- 신고 처리 모달  -->
-			<div class="modal fade bs-reporting-modal" id="reportingModal" tabindex="-1" role="dialog" aria-labelledby="reportingModalLabel" aria-hidden="true">
+			<div class="modal fade bs-reporting-modal" id="reportBoardModal" tabindex="-1" role="dialog" aria-labelledby="reportingModalLabel" aria-hidden="true">
 			  <div class="modal-dialog">
 			    <div class="modal-content">
 			      <div class="modal-header">
 			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			        <h4 class="modal-title" id="reportingModalLabel">신고 처리</h4>
+			        <h4 class="modal-title">신고 처리</h4>
 			      </div>
 			      
-			      <div class="modal-body" id="reportingModalBody" style="height: 430px;">
-			      	<div>
-			      		<textarea class="form-control" placeholder="글 내용" id="CONTENTS" name="CONTENTS" maxlength="2048" style="height: 350px;"></textarea>
-			      	</div>
+			      <div class="modal-body" style="height: 430px;">
+			      	<div id="reportBoardCon" style="height: 350px;"></div>
+			      	<!--<textarea class="form-control" id="reportBoardCon" disabled placeholder="글 내용" maxlength="2048" style="height: 350px;"></textarea>-->
 			      	<div style="height:10px;"></div>
 			      	<div>
 			      		<div class="col-md-3"><h5>삭제여부</h5></div>
-			      		<div class="col-md-3"><input type="checkbox"></div>
+			      		<div class="col-md-3"><input type="checkbox" id="checkDelete"></div>
 			      		<div class="col-md-3"><h5>활동정지</h5> </div>
 			      		<div class="col-md-3">
-			      			<select class="form-control" style="width:100px; height:31px;">
+			      			<select class="form-control" id="checkStop" style="width:100px; height:31px;">
 			      				<option>없음</option>
 								<option>3일</option>
 								<option>7일</option>
@@ -104,7 +102,7 @@
 			      	</div>
 			      </div>
 			      <div class="modal-footer">
-			       	<button type="button" class="btn btn-success">처리하기</button>
+			       	<button type="button" class="btn btn-success" id="reportProcess">처리하기</button>
 			       	<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
 			      </div>
 			    </div>
@@ -118,13 +116,9 @@
 			    <div class="modal-content">
 			      <div class="modal-header">
 			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			        <h4 class="modal-title" id="userListModalLabel">신고자 목록</h4>
-			      </div>
-			      
-			      <div class="modal-body" id="userListModalBody">
-			      	
-			      </div>
-			      
+			        <h4 class="modal-title">신고자 목록</h4>
+			      </div>		
+			      <div class="modal-body" id="userListModalBody"></div>			      
 			      <div class="modal-footer">
 			       	<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
 			      </div>
@@ -133,34 +127,52 @@
 			 </div>
 			<!-- 신고자 목록 모달 끝 -->
 		  </div>
+		  <!-- Tab panes end -->
 		  
+		  <!-- Tab panes 2 -->
 		  <div role="tabpanel" class="tab-pane fade" id="complete">
 		  	<table class="table table-hover" style="text-align:left; border:1px solid #dddddd; margin-top:20px;"> 
-				<!-- <thead>
+				<thead>
 					<tr>
-						<th style="background-color: #eeeeee; text-align: center; width: 13%;">번호</th>
-						<th style="background-color: #eeeeee; text-align: left; width: *;">제목</th>
-						<th style="background-color: #eeeeee; text-align: center; width: 15%;">조회수</th>
-						<th style="background-color: #eeeeee; text-align: center; width: 15%;">작성일</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 10%;">처리 번호</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 10%;">게시글 번호</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">회원 아이디</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">처리 시간</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">관리자 아이디</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 10%;">삭제여부</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 10%;">활동정지</th>
+						<th style="background-color: #eeeeee; text-align: center; width: *%;"></th>
 					</tr>
-				</thead> -->
+				</thead>
 				<tbody>
 				<c:choose>
-			    <c:when test="${fn:length(userBoardList) > 0 }">
-			    	<c:forEach items="${userBoardList}" var="row">
+			    <c:when test="${fn:length(list2) > 0 }">
+			    	<c:forEach items="${list2}" var="row2">
 						<tr>
 							<td style="text-align: center;">
-								<c:out value="${row.IDX }"></c:out>
-							</td>
-							<td>
-								<a href="#" name="title"><c:out value="${row.TITLE}"></c:out></a>
-								<input type="hidden" id="IDX" value="${row.IDX }">
+								<h5><c:out value="${row2.RPC_INDEX }"></c:out></h5>
 							</td>
 							<td style="text-align: center;">
-							 	<c:out value="${row.HIT_CNT }"></c:out>
+								<h5><c:out value="${row2.RPC_IDX }"></c:out></h5>
 							</td>
 							<td style="text-align: center;">
-							 	<c:out value="${row.CREA_DTM }"></c:out>
+								<h5><c:out value="${row2.RPC_ID }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<h5><c:out value="${row2.RPC_DATE }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<h5><c:out value="${row2.RPC_ADMIN }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<h5><c:out value="${row2.RPC_DELETE }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<h5><c:out value="${row2.RPC_STOP }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<button type="button" name="userList" class="btn btn-default">게시글 보기</button>				
+								<input type="hidden" id="RPC_IDX" name="RPC_IDX" value="${row2.RPC_IDX}">
 							</td>
 						</tr>
 					</c:forEach>
@@ -168,13 +180,14 @@
 				
 				<c:otherwise>
 					<tr>
-						<td colspan="6" style="text-align: center;">조회된 결과가 없습니다.</td>
+						<td colspan="8" style="text-align: center;">조회된 결과가 없습니다.</td>
 					</tr>
 				</c:otherwise>
 				</c:choose>
 				</tbody>
 			</table>
 		  </div>
+		  <!-- Tab panes 2 end -->
 		  
 		  <div role="tabpanel" class="tab-pane fade" id="log">
 		  	<table class="table table-hover" style="text-align:left; border:1px solid #dddddd; margin-top:20px;"> 
@@ -225,17 +238,33 @@
 
 <script type="text/javascript">
 $(document).ready(function() { 
+	var selectIDX;
+	var selectRID;
+	var selectDataList;
+	
 	 $('[name="userList"]').unbind("click").click(function(e) {
 		   e.preventDefault();
 		   fn_openUserList($(this));    
 	  });
+	 
+	 $('[name="reportBoard"]').unbind("click").click(function(e) {
+		   e.preventDefault();
+		   var obj = $(this);
+		   selectIDX = obj.parent().find("#RP_IDX").val();
+		   selectRID = obj.parent().find("#RP_RID").val();
+		   fn_openReportBoard($(this)); 		   
+	  });
+	 
+	 $("#reportProcess").unbind("click").click(function(e) {
+		   e.preventDefault();
+		   fn_reportProcess(selectIDX, selectRID);
+	
+	  });
 });
 
 function fn_openUserList(obj) {
-	
-	var idx = obj.parent().find("#RP_IDX").val()
+	var idx = obj.parent().find("#RP_IDX").val();
 	var listData = {"IDX": idx};
-	var userlist;
 
 	 $.ajax({
 	  async:false,
@@ -258,8 +287,55 @@ function fn_openUserList(obj) {
 	   	  $('#userListModal').modal('show');
 	  }  
 	 });
-
 }
+
+function fn_openReportBoard(obj) {
+	var idx = obj.parent().find("#RP_IDX").val();
+	var listData = {"IDX": idx};
+
+	 $.ajax({
+	  async:false,
+	  type : "POST", 
+	  url : "${pageContext.request.contextPath}/admin/openReportBoard.do", 
+	  data : listData,
+	  dataType : "json",
+	  error : function(error) {
+		    alert("서버가 응답하지 않습니다. \n다시 시도해주시기 바랍니다.");
+		   },
+	  success : function(data) {
+		  var text ="";
+		  $.each(data, function() {
+			  var title = "제목 : " + this.TITLE + "<br>";
+			  var contents = "내용 : " + this.CONTENTS;
+			  text += "<h4>" + title + contents + "</h4>";
+			});
+
+		  $("#reportBoardCon").empty();
+	  	  $("#reportBoardCon").append(text);
+	   	  $('#reportBoardModal').modal('show');	   	  
+	  }  
+	 });
+} 
+
+function fn_reportProcess(selectIDX, selectRID) {
+	var checkDelete;
+	var checked = $('input:checkbox[id="checkDelete"]').is(":checked");
+	if(checked == true) checkDelete = "O";
+	else if(checked == false) checkDelete = "X";
+	var checkStop = $('#checkStop option:selected').text();
+	var adminId = $('#adminId').val();
+	$('#reportBoardModal').modal('hide');
+	
+	var comSubmit = new ComSubmit();
+	comSubmit.setUrl("<c:url value='/admin/reportProcess.do' />");
+	comSubmit.addParam("IDX", selectIDX);
+	comSubmit.addParam("ID", selectRID);
+	comSubmit.addParam("ADMINID", adminId);
+	comSubmit.addParam("CHECKDELETE", checkDelete);
+	comSubmit.addParam("CHECKSTOP", checkStop);
+	comSubmit.submit();
+
+} 
 </script>
 
 </body>

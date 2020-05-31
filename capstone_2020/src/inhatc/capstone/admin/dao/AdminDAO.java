@@ -17,12 +17,34 @@ public class AdminDAO extends AbstractDAO {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectRpComList(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		return (List<Map<String, Object>>)selectList("admin.selectRpComList", map);
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> selectUserList(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
 		return (List<Map<String, Object>>)selectList("admin.selectUserList", map);
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectReportBoard(Map<String, Object> map) throws Exception{
+	    return (List<Map<String, Object>>) selectList("admin.selectReportBoard", map);
+	}
 	
-
+	public void deleteBoard(Map<String, Object> map) throws Exception{
+	    update("admin.deleteBoard", map);
+	}
+	
+	public void updateReport(Map<String, Object> map) throws Exception{
+	    update("admin.updateReport", map);
+	}
+	
+	public void insertRpCompleted(Map<String, Object> map) throws Exception{
+	    insert("admin.insertRpCompleted", map);
+	}
+	
+	
 
 }

@@ -23,18 +23,46 @@ public class AdminController {
    @RequestMapping(value="/admin/openAdmin.do")
    public ModelAndView openAdmin(Map<String,Object> commandMap) throws Exception{
 	   List<Map<String,Object>> list = adminService.selectReportList(commandMap);
+	   List<Map<String,Object>> list2 = adminService.selectRpComList(commandMap);
 	   ModelAndView mv = new ModelAndView("/admin/admin");
 	   mv.addObject("list", list);
+	   mv.addObject("list2", list2);
 	   return mv;
    }
    
    @RequestMapping(value="/admin/openUserList.do")
    @ResponseBody
    public List<Map<String,Object>> openUserList(CommandMap commandMap) throws Exception{
-	   System.out.println(commandMap.get("IDX"));
+	   //System.out.println(commandMap.get("IDX"));
 	   List<Map<String,Object>> list = adminService.selectUserList(commandMap.getMap());
-	   System.out.println(list);
+	   //System.out.println(list);
 	   return list;
    } 
+   
+   @RequestMapping(value="/admin/openReportBoard.do")
+   @ResponseBody
+   public List<Map<String,Object>> openReportBoard(CommandMap commandMap) throws Exception{
+	   //System.out.println(commandMap.get("IDX"));
+	   List<Map<String,Object>> list = adminService.selectReportBoard(commandMap.getMap());
+	   //System.out.println(list);
+	   return list;
+   }
+   
+   @RequestMapping(value="/admin/reportProcess.do")
+   public ModelAndView deleteBoard(CommandMap commandMap) throws Exception{ 
+	   String checked = (String)commandMap.get("CHECKDELETE");
+	   //String str_stopday = (String)commandMap.get("CHECKSTOP");
+	   
+       if(checked.equals("O")) {
+    	   adminService.deleteBoard(commandMap.getMap());
+       }
+       adminService.updateReport(commandMap.getMap());
+       adminService.insertRpCompleted(commandMap.getMap());
+       
+       ModelAndView mv = new ModelAndView("/popup");
+       mv.addObject("msg", "처리되었습니다.");
+       mv.addObject("loc", "/admin/openAdmin.do");
+       return mv;
+   }
 
 }

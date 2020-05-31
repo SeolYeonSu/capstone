@@ -24,11 +24,36 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
+	public List<Map<String, Object>> selectRpComList(Map<String, Object> map) throws Exception {		
+		return adminDAO.selectRpComList(map);
+	}
+	
+	@Override
 	public List<Map<String, Object>> selectUserList(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
 		return adminDAO.selectUserList(map);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectReportBoard(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		return adminDAO.selectReportBoard(map);
+	}
 	
+	@Override
+	public void deleteBoard(Map<String, Object> map) throws Exception {
+	    adminDAO.deleteBoard(map);
+	}
 	
+	@Override
+	public void updateReport(Map<String, Object> map) throws Exception {
+	    adminDAO.updateReport(map);
+	}
+
+	@Override
+	public void insertRpCompleted(Map<String, Object> map) throws Exception {
+		adminDAO.insertRpCompleted(map);
+		
+	}
 
 }
