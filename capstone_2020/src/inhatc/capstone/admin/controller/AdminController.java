@@ -33,29 +33,22 @@ public class AdminController {
    @RequestMapping(value="/admin/openUserList.do")
    @ResponseBody
    public List<Map<String,Object>> openUserList(CommandMap commandMap) throws Exception{
-	   //System.out.println(commandMap.get("IDX"));
 	   List<Map<String,Object>> list = adminService.selectUserList(commandMap.getMap());
-	   //System.out.println(list);
 	   return list;
    } 
    
    @RequestMapping(value="/admin/openReportBoard.do")
    @ResponseBody
    public List<Map<String,Object>> openReportBoard(CommandMap commandMap) throws Exception{
-	   //System.out.println(commandMap.get("IDX"));
 	   List<Map<String,Object>> list = adminService.selectReportBoard(commandMap.getMap());
-	   //System.out.println(list);
 	   return list;
    }
    
    @RequestMapping(value="/admin/reportProcess.do")
-   public ModelAndView deleteBoard(CommandMap commandMap) throws Exception{ 
-	   String checked = (String)commandMap.get("CHECKDELETE");
+   public ModelAndView reportProcess(CommandMap commandMap) throws Exception{ 
 	   //String str_stopday = (String)commandMap.get("CHECKSTOP");
 	   
-       if(checked.equals("O")) {
-    	   adminService.deleteBoard(commandMap.getMap());
-       }
+	   adminService.deleteBoard(commandMap.getMap());
        adminService.updateReport(commandMap.getMap());
        adminService.insertRpCompleted(commandMap.getMap());
        
@@ -63,6 +56,19 @@ public class AdminController {
        mv.addObject("msg", "처리되었습니다.");
        mv.addObject("loc", "/admin/openAdmin.do");
        return mv;
+   }
+   
+   @RequestMapping(value="/admin/updateRpcom.do")
+   @ResponseBody
+   public boolean updateRpcom(CommandMap commandMap) throws Exception{ 
+	   
+	   adminService.deleteBoard(commandMap.getMap());
+       adminService.updateRpcom(commandMap.getMap());
+       
+       //ModelAndView mv = new ModelAndView("/popup");
+       //mv.addObject("msg", "처리되었습니다.");
+       //mv.addObject("loc", "/admin/openAdmin.do");
+       return true;
    }
 
 }

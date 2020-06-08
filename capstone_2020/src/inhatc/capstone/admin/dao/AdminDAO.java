@@ -45,6 +45,9 @@ public class AdminDAO extends AbstractDAO {
 	    insert("admin.insertRpCompleted", map);
 	}
 	
+	public void updateRpcom(Map<String, Object> map) throws Exception{
+	    update("admin.updateRpcom", map);
+	}
 	
 
 }

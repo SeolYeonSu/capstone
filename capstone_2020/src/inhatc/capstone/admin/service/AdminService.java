@@ -12,5 +12,6 @@ public interface AdminService {
 	void updateReport(Map<String, Object> map) throws Exception;
 	void insertRpCompleted(Map<String, Object> map) throws Exception;
 	List<Map<String, Object>> selectRpComList(Map<String, Object> map) throws Exception;
+	void updateRpcom(Map<String, Object> map) throws Exception;
 	
 }

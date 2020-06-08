@@ -75,7 +75,7 @@
     <![CDATA[
         UPDATE TB_BOARD
         SET
-            DEL_GB = 'Y'
+            DEL_GB = #{DELETESTATE}
         WHERE
             IDX = #{IDX}
     ]]>
@@ -103,5 +103,16 @@
 	        )
     ]]>
 	</insert>
+	
+	<update id="updateRpcom" parameterType="hashmap">
+    <![CDATA[
+        UPDATE RPCOMPLETED
+        SET
+            RPC_DELETE = #{CHECKDELETE},
+            RPC_DATE = now()
+        WHERE
+            RPC_INDEX = #{INDEX}
+    ]]>
+	</update>
 	
 </mapper>

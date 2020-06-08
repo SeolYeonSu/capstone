@@ -56,4 +56,10 @@ public class AdminServiceImpl implements AdminService{
 		
 	}
 
+	@Override
+	public void updateRpcom(Map<String, Object> map) throws Exception {
+		adminDAO.updateRpcom(map);
+		
+	}
+
 }
