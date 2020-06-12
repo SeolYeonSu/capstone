@@ -4,28 +4,27 @@
 <html>
 
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>Insert title here</title>
-
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<!-- <link rel="stylesheet" type="text/css" href="<c:url value='/css/ui.css'/>" /> -->
-
-<!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="<c:url value='/js/common.js' />" charset="utf-8"></script>
-<!-- YCS-css -->
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/ycs.css'/>" /> 
-<!-- Bootstrap-->
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>Insert title here</title>
+	
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+	<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+	<!-- <link rel="stylesheet" type="text/css" href="<c:url value='/css/ui.css'/>" /> -->
+	
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="<c:url value='/js/common.js' />" charset="utf-8"></script>
+	<!-- YCS-css -->
+	<link rel="stylesheet" type="text/css" href="<c:url value='/css/ycs.css'/>" /> 
+	<!-- Bootstrap-->
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
 
 <body>
-	<!-- 네비게이션  -->
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed"

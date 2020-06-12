@@ -1,8 +1,15 @@
 package inhatc.capstone.crawl.controller;
 
+
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Resource;
 
@@ -11,9 +18,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import inhatc.capstone.cmd.service.CmdService;
+import inhatc.capstone.cmd.service.CmdServiceImpl;
+import inhatc.capstone.cmd.service.MV_Rank_DTO;
 import inhatc.capstone.common.map.CommandMap;
 import inhatc.capstone.crawl.service.CrawlService;
 import inhatc.capstone.crawl.service.CrawlServiceImpl;
+import inhatc.capstone.crawl.service.DayService;
+import sun.util.calendar.Gregorian;
+
 
 
 
@@ -30,7 +44,25 @@ public class CrawlController {
     public ModelAndView openMovieSearchResult() throws Exception{
 		
 		List<List<String>> data = null;
-		String path = "C:\\Users\\jinki\\Desktop\\final.csv"; //csv 파일 경로 설정
+		
+		DayService DS = new DayService();
+		DS.setDay();
+		
+		String defaultPath = "C:\\_Routine\\WorkBench\\crawl\\boxOffice\\boxOffice_";
+		String filePath = defaultPath + DS.getToday() + ".csv";
+		
+		File f = new File(filePath);
+		if(f.exists()) {
+			//System.out.println("파일 존재");
+			
+		}else {
+			//System.out.println("파일 없음");
+			filePath = "";
+			filePath = defaultPath + DS.getYesday() + ".csv";
+		}
+		//String path = "C:\\_Routine\\WorkBench\\crawl\\boxOffice\\boxOffice_2020-06-10.csv"; //csv 파일 경로 설정
+		String path = filePath; //csv 파일 경로 설정
+		//String path = "C:\\Users\\jinki\\Desktop\\final.csv"; //csv 파일 경로 설정
 		System.out.println("in");
 		try {
 			//csv 셋팅
@@ -138,7 +170,7 @@ public class CrawlController {
 		}
 		
 		//전치행렬완성된걸 출력
-		List<List<String>> attendanceData = new ArrayList<List<String>>();; //attendance 관객수
+		List<List<String>> attendanceData = new ArrayList<List<String>>(); //attendance 관객수
 		for (int i = 0; i < dataXLen-1; i++) {
 			List<String> tmpList = new ArrayList<String>();
 			String[] array = new String[dataYLen-1];
@@ -162,13 +194,51 @@ public class CrawlController {
 		//이걸 전치행렬로 바꿔서 16행 8열로 바꿔준다
 		//그리고 잘 가공해서 리스트 잘 만들어가지고 보낸다.
 		
+		////////////////////////////////////////////////////////////////////////////////////
+		//네이버 실검
+		CmdService cmdService = new CmdServiceImpl();
+
+		int len = 3;
+		ArrayList<MV_Rank_DTO> naver = new ArrayList<MV_Rank_DTO>();
+		ArrayList<MV_Rank_DTO> daum = new ArrayList<MV_Rank_DTO>();
+		ArrayList<MV_Rank_DTO> nate = new ArrayList<MV_Rank_DTO>();
+		
+		
+		//ArrayList<MV_Rank_DTO> naver = new ArrayList<MV_Rank_DTO>();
+		//String te = cmdService.inputCommand(0);
+		//System.out.println(te);
+		//naver = cmdService.execCMD_MV_Rank(te);
+		//System.out.println(naver.get(0).getRank());
+		
+		for (int i = 0; i < len; i++) {
+			//System.out.println(cmdService.inputCommand(i));
+			//tmpRank = cmdService.execCMD_MV_Rank(cmdService.inputCommand(i));
+			//System.out.println(tmpRank.get(i).getTitle());
+			if(i==0) {
+				naver = cmdService.execCMD_MV_Rank(cmdService.inputCommand(i));
+			}else if(i==1) {
+				daum = cmdService.execCMD_MV_Rank(cmdService.inputCommand(i));
+			}else if(i==2) {
+				nate = cmdService.execCMD_MV_Rank(cmdService.inputCommand(i));
+			}
+			//tmpRank.clear();
+		}
+		//System.out.println(naver.get(0).getTitle());
+		////////////////////////////////////////////////////////////////////////////////////
+		
 		ModelAndView mv = new ModelAndView("crawl/crawlPage");
+		mv.addObject("naverCrawl",naver);
+		mv.addObject("daumCrawl",daum);
+		mv.addObject("nateCrawl",nate);
 		mv.addObject("boxoffice",data);
 		mv.addObject("attendance",attendanceData);
         return mv;
     }
 	
 	
+	
+
+
 	//개발중
 	@RequestMapping(value="/crawl/GetCsv.do")
 	@ResponseBody

@@ -4,28 +4,27 @@
 <html>
 
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>Insert title here</title>
-
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<!-- <link rel="stylesheet" type="text/css" href="<c:url value='/css/ui.css'/>" /> -->
-
-<!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="<c:url value='/js/common.js' />" charset="utf-8"></script>
-<!-- YCS-css -->
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/ycs.css'/>" /> 
-<!-- Bootstrap-->
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>Insert title here</title>
+	
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+	<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+	<!-- <link rel="stylesheet" type="text/css" href="<c:url value='/css/ui.css'/>" /> -->
+	
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="<c:url value='/js/common.js' />" charset="utf-8"></script>
+	<!-- YCS-css -->
+	<link rel="stylesheet" type="text/css" href="<c:url value='/css/ycs.css'/>" /> 
+	<!-- Bootstrap-->
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
 
 <body>
-	<!-- 네비게이션  -->
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed"
@@ -41,7 +40,7 @@
 			id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 				<li><a href="#" id="bbsBtn">자유 게시판</a></li> <!-- 원래는 "영화 뉴스" -->
-				
+				<li><a href="#" id="bmvBtn">인기 영화</a></li> 
 				<!-- <li><a href="#" id="bbsBtn">자유 게시판</a></li> -->
 				<!-- <li><a href="#" id="recommendBtn">영화 추천</a></li> -->
 			</ul>
@@ -117,7 +116,10 @@
 				e.preventDefault();
 				fn_moveToBBS();
 			});
-
+			$("#bmvBtn").unbind("click").click(function(e) {
+				e.preventDefault();
+				fn_moveToBMV();
+			});
 			$("#home").unbind("click").click(function(e) {
 				e.preventDefault();
 				fn_home();
@@ -193,6 +195,11 @@
 			var comSubmit = new ComSubmit("frm");
 			comSubmit.setUrl("<c:url value='/admin/openAdmin.do' />");
 		    comSubmit.submit();
+		}
+
+		function fn_moveToBMV() {
+			window.location.href = "<c:url value='/crawl/openCrawlPage.do' />";
+			//window.location.href = "/bbs/openBoardList.do";로그인 안해도 게시판은 볼수잇게 인터셉터 취소
 		}
 	</script>
 
