@@ -136,4 +136,12 @@ public class UserController {
 		 
 		  return mav;
 		 }
+		 
+		 @RequestMapping(value="/user/openPopup.do")
+		 @ResponseBody
+		 public int openPopup(CommandMap commandMap) throws Exception {
+			 int checkResult = userService.selectRpcCheck(commandMap.getMap());
+			 if(checkResult != 0) userService.updateRpcCheck(commandMap.getMap());
+			 return checkResult;
+		 }
 }

@@ -57,6 +57,7 @@
 								<button type="button" name="userList_btn" class="btn btn-info">신고자 목록</button>				
 								<input type="hidden" id="RP_IDX" name="RP_IDX" value="${row.RP_IDX}">
 								<input type="hidden" id="RP_RID" name="RP_RID" value="${row.RP_RID}">
+								<input type="hidden" id="RP_REASON" name="RP_REASON" value="${row.RP_REASON}">
 								<input type="hidden" id="adminId" name="adminId" value="${loginInfo.ID}">
 							</td>
 						</tr>
@@ -135,9 +136,10 @@
 					<tr>
 						<th style="background-color: #eeeeee; text-align: center; width: 10%;">처리 번호</th>
 						<th style="background-color: #eeeeee; text-align: center; width: 10%;">게시글 번호</th>
-						<th style="background-color: #eeeeee; text-align: center; width: 15%;">회원 아이디</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 10%;">회원 아이디</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 10%;">사유</th>
 						<th style="background-color: #eeeeee; text-align: center; width: 15%;">처리 시간</th>
-						<th style="background-color: #eeeeee; text-align: center; width: 15%;">관리자 아이디</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 10%;">관리자 아이디</th>
 						<th style="background-color: #eeeeee; text-align: center; width: 10%;">삭제여부</th>
 						<th style="background-color: #eeeeee; text-align: center; width: 10%;">활동정지</th>
 						<th style="background-color: #eeeeee; text-align: center; width: *%;"></th>
@@ -158,6 +160,9 @@
 								<h5><c:out value="${row2.RPC_ID }"></c:out></h5>
 							</td>
 							<td style="text-align: center;">
+								<h5><c:out value="${row2.RPC_REASON }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
 								<h5><c:out value="${row2.RPC_DATE }"></c:out></h5>
 							</td>
 							<td style="text-align: center;">
@@ -174,6 +179,7 @@
 								<input type="hidden" id="RPC_INDEX" name="RPC_INDEX" value="${row2.RPC_INDEX}">
 								<input type="hidden" id="RPC_IDX" name="RPC_IDX" value="${row2.RPC_IDX}">
 								<input type="hidden" id="RPC_DELETE" name="RPC_DELETE" value="${row2.RPC_DELETE}">
+								<input type="hidden" id="RPC_STOP" name="RPC_STOP" value="${row2.RPC_STOP}">
 								<input type="hidden" id="RPC_ADMIN" name="RPC_ADMIN" value="${row2.RPC_ADMIN}">
 								<input type="hidden" id="loginId" name="loginId" value="${loginInfo.ID}">
 							</td>
@@ -205,19 +211,6 @@
 			      	<div>
 			      		<div class="col-md-3"><h5>삭제여부</h5></div>
 			      		<div class="col-md-3"><input type="checkbox" id="checkDelete2"></div>
-			      		<!--  
-			      		<div class="col-md-3"><h5>활동정지</h5> </div>
-			      		<div class="col-md-3">
-			      			<select class="form-control" id="checkStop2" style="width:100px; height:31px;">
-			      				<option>없음</option>
-								<option>3일</option>
-								<option>7일</option>
-								<option>15일</option>
-								<option>30일</option>
-								<option>영구</option>
-							</select>
-						</div>		
-						-->      		
 			      	</div>
 			      </div>
 			      <div class="modal-footer">
@@ -285,6 +278,8 @@ $(document).ready(function() {
 	var selectIndex;
 	var selectAdmin;
 	var selectLoginid;
+	var selectReason;
+	var selectStop;
 	
 	 $('[name="userList_btn"]').unbind("click").click(function(e) {
 		   e.preventDefault();
@@ -296,12 +291,13 @@ $(document).ready(function() {
 		   var obj = $(this);
 		   selectIDX = obj.parent().find("#RP_IDX").val();
 		   selectRID = obj.parent().find("#RP_RID").val();
+		   selectReason = obj.parent().find("#RP_REASON").val();
 		   fn_openReportBoard($(this)); 		   
 	  });
 	 
 	 $("#reportProcess_btn").unbind("click").click(function(e) {
 		   e.preventDefault();
-		   fn_reportProcess(selectIDX, selectRID);
+		   fn_reportProcess(selectIDX, selectRID, selectReason);
 	
 	  });
 	 
@@ -312,12 +308,13 @@ $(document).ready(function() {
 		   selectIDX = obj.parent().find("#RPC_IDX").val();
 		   selectAdmin = obj.parent().find("#RPC_ADMIN").val();
 		   selectLoginid = obj.parent().find("#loginId").val();
+		   selectStop = obj.parent().find("#RPC_STOP").val();
 		   fn_openRpComBoard($(this)); 		   
 	  });
 	 
 	 $("#rpComProcess_btn").unbind("click").click(function(e) {
 		   e.preventDefault();
-		   fn_RpComUpdate(selectIndex, selectIDX, selectAdmin, selectLoginid);
+		   fn_RpComUpdate(selectIndex, selectIDX, selectAdmin, selectLoginid, selectStop);
 	
 	  });
 	 
@@ -393,20 +390,31 @@ function fn_openReportBoard(obj) {
 } 
 
 //신고 처리하기
-function fn_reportProcess(selectIDX, selectRID) {
+function fn_reportProcess(selectIDX, selectRID, selectReason) {
 	var checkDelete;
 	var deleteState;
+	var rpccheck = 0;
 	var checked = $('input:checkbox[id="checkDelete"]').is(":checked");
+	
 	if(checked == true) {
 		checkDelete = "O";
 		deleteState = "Y";
+		//rpccheck = 0;
 	}
 	else if(checked == false) {
 		checkDelete = "X";
 		deleteState = "N";
+		//rpccheck = 1;
 	}
+	
 	var checkStop = $('#checkStop option:selected').text();
+	
+	if(checkDelete == "X" && checkStop == "없음") {
+		rpccheck = 1;
+	}
+	
 	var adminId = $('#adminId').val();
+	
 	$('#reportBoardModal').modal('hide');
 	
 	var comSubmit = new ComSubmit();
@@ -417,6 +425,8 @@ function fn_reportProcess(selectIDX, selectRID) {
 	comSubmit.addParam("CHECKDELETE", checkDelete);
 	comSubmit.addParam("DELETESTATE", deleteState);
 	comSubmit.addParam("CHECKSTOP", checkStop);
+	comSubmit.addParam("REASON", selectReason);
+	comSubmit.addParam("RPCCHECK", rpccheck);
 	comSubmit.submit();
 } 
 
@@ -453,19 +463,36 @@ function fn_openRpComBoard(obj) {
 } 
 
 //신고 처리완료 수정하기
-function fn_RpComUpdate(selectIndex, selectIDX, selectAdmin, selectLoginid) {
+function fn_RpComUpdate(selectIndex, selectIDX, selectAdmin, selectLoginid, selectStop) {
 	var checkDelete;
 	var deleteState;
+	var rpccheck;
 	var checked = $('input:checkbox[id="checkDelete2"]').is(":checked");
+	
 	if(checked == true) {
 		checkDelete = "O";
 		deleteState = "Y";
+		rpccheck = 0;
 	}
-	else if(checked == false) {
+	else {
 		checkDelete = "X";
 		deleteState = "N";
+		if(selectStop == "없음") rpccheck = 1;
+		else rpccheck = 0;
 	}
-	var listData = {"INDEX": selectIndex, "IDX": selectIDX, "CHECKDELETE": checkDelete, "DELETESTATE": deleteState};
+	/*else if(checked == false && checkStop != "없음") {
+		checkDelete = "X";
+		deleteState = "N";
+		rpccheck = 0;
+	}
+	else if(checked == false && checkStop == "없음") {
+		checkDelete = "X";
+		deleteState = "N";
+		rpccheck = 1;
+	}*/
+	
+	
+	var listData = {"INDEX": selectIndex, "IDX": selectIDX, "CHECKDELETE": checkDelete, "DELETESTATE": deleteState, "RPCCHECK": rpccheck};
 	
 	if(selectAdmin == selectLoginid) {
 		$('#rpComBoardModal').modal('hide');

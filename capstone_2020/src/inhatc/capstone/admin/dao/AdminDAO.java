@@ -49,5 +49,24 @@ public class AdminDAO extends AbstractDAO {
 	    update("admin.updateRpcom", map);
 	}
 	
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> selectUserStop(Map<String, Object> map) throws Exception {
+		return (Map<String, Object>)selectOne("admin.selectUserStop", map);
+	}
+	
+	public void insertUserStop(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		insert("admin.insertUserStop", map);
+	}
+	
+	public void updateUsDay(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		update("admin.updateUsDay", map);
+	}
+	
+	public void updateUsEnd(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		update("admin.updateUsEnd", map);
+	}
 
 }

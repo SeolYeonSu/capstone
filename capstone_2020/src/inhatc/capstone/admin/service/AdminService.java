@@ -14,4 +14,9 @@ public interface AdminService {
 	List<Map<String, Object>> selectRpComList(Map<String, Object> map) throws Exception;
 	void updateRpcom(Map<String, Object> map) throws Exception;
 	
+	Map<String, Object> selectUserStop(Map<String, Object> map) throws Exception;
+	void insertUserStop(Map<String, Object> map) throws Exception;
+	void updateUsDay(Map<String, Object> map) throws Exception;
+	void updateUsEnd(Map<String, Object> map) throws Exception;
+	
 }

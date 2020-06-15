@@ -62,4 +62,28 @@ public class AdminServiceImpl implements AdminService{
 		
 	}
 
+	@Override
+	public Map<String, Object> selectUserStop(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		return adminDAO.selectUserStop(map);
+	}
+
+	@Override
+	public void insertUserStop(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		adminDAO.insertUserStop(map);
+	}
+
+	@Override
+	public void updateUsDay(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		adminDAO.updateUsDay(map);
+	}
+
+	@Override
+	public void updateUsEnd(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		adminDAO.updateUsEnd(map);
+	}
+
 }

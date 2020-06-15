@@ -1,0 +1,17 @@
+package inhatc.capstone.user.service;
+
+import java.util.Map;
+
+import inhatc.capstone.user.dto.UserDTO;
+
+public interface UserService {
+	void insertUserData(Map<String, Object> map) throws Exception;
+	int selectUserID(Map<String, Object> map) throws Exception;
+	Map<String, Object> selectUserInfo(Map<String, Object> map) throws Exception;
+	
+	int selectRpcCheck(Map<String, Object> map) throws Exception;
+	void updateRpcCheck(Map<String, Object> map) throws Exception;
+	
+	Map<String, Object> selectUserStop(Map<String, Object> map) throws Exception;
+	void insertUserStop(Map<String, Object> map) throws Exception;
+}

@@ -22,8 +22,6 @@
 			<label>약관동의</label>
 			<textarea style="text-align:center"cols="40" rows="5" readonly="readonly">캡스톤 여러분,
 한 학기 동안 수고 많으셨습니다.
-남은 2019년도 잘 마무리하시고
-항상 좋은 일만 함께하길 바랍니다.
 			</textarea>
 			<div style="text-align:right; margin-top:10px">
 				<input type="checkbox" id="agree_checkbox" >

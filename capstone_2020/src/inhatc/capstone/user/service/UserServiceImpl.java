@@ -30,4 +30,35 @@ public class UserServiceImpl implements UserService{
 	  return userDAO.selectUserInfo(map);
 	 }
 
+	@Override
+	public int selectRpcCheck(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		return userDAO.selectRpcCheck(map);
+	}
+
+	@Override
+	public void updateRpcCheck(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		userDAO.updateRpcCheck(map);
+		
+	}
+
+	@Override
+	public Map<String, Object> selectUserStop(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		return userDAO.selectUserStop(map);
+	}
+	
+	@Override
+	public void updateUsStart(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		userDAO.updateUsStart(map);
+	}
+
+	@Override
+	public void updateUsEnd(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		userDAO.updateUsEnd(map);
+	}
+
 }

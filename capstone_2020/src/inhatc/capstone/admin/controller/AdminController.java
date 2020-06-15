@@ -46,11 +46,31 @@ public class AdminController {
    
    @RequestMapping(value="/admin/reportProcess.do")
    public ModelAndView reportProcess(CommandMap commandMap) throws Exception{ 
-	   //String str_stopday = (String)commandMap.get("CHECKSTOP");
-	   
 	   adminService.deleteBoard(commandMap.getMap());
        adminService.updateReport(commandMap.getMap());
        adminService.insertRpCompleted(commandMap.getMap());
+       
+       String day = (String)commandMap.get("CHECKSTOP");
+       if(!(day.equals("없음"))) {
+    	   Map<String,Object> select_map = adminService.selectUserStop(commandMap.getMap()); 
+    	   if(select_map == null) {
+    		   adminService.insertUserStop(commandMap.getMap());
+    	   }
+    	   else {
+        	   String select_day = (String) select_map.get("US_DAY");
+    		   if(select_day.equals("영구")) {}
+    		   else {
+    			   int num1 = Integer.parseInt(day.substring(0, 1));
+    			   int num2 = Integer.parseInt(select_day.substring(0, 1));
+    			   int sum = num1 + num2;
+    			   String new_day = Integer.toString(sum) + "일";
+    			   commandMap.getMap().put("CHECKSTOP", new_day);
+    			   adminService.updateUsDay(commandMap.getMap());
+    		   }
+    		   
+    	   }
+    	   
+       }
        
        ModelAndView mv = new ModelAndView("/popup");
        mv.addObject("msg", "처리되었습니다.");
@@ -64,10 +84,6 @@ public class AdminController {
 	   
 	   adminService.deleteBoard(commandMap.getMap());
        adminService.updateRpcom(commandMap.getMap());
-       
-       //ModelAndView mv = new ModelAndView("/popup");
-       //mv.addObject("msg", "처리되었습니다.");
-       //mv.addObject("loc", "/admin/openAdmin.do");
        return true;
    }
 

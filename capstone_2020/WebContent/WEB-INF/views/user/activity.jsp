@@ -15,6 +15,7 @@
 	  <ul class="nav nav-tabs" role="tablist">
 	    <li role="presentation" class="active"><a href="#rate" aria-controls="rate" role="tab" data-toggle="tab">내 영화 평점</a></li>
 	    <li role="presentation"><a href="#post" aria-controls="post" role="tab" data-toggle="tab">내 게시글</a></li>
+	    <li role="presentation"><a href="#delete_stop_list" aria-controls="delete_stop_list" role="tab" data-toggle="tab">제재 내역</a></li>
 	  </ul>
 	  <!-- Tab panes -->
 	  <div class="tab-content">
@@ -98,6 +99,50 @@
 				</tbody>
 			</table>
 		  </div>
+		  
+		  <div role="tabpanel" class="tab-pane fade" id="delete_stop_list">
+		  	<h3>제재 내역<small>내 제재 내역을 확인할 수 있습니다.</small></h3>
+		  	<table class="table table-hover" style="text-align:left; border:1px solid #dddddd; margin-top:20px;"> 
+				<thead>
+					<tr>
+						<th style="background-color: #eeeeee; text-align: center; width: 13%;">번호</th>
+						<th style="background-color: #eeeeee; text-align: left; width: *;">제목</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">조회수</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">작성일</th>
+					</tr>
+				</thead>
+				<tbody>
+				<c:choose>
+			    <c:when test="${fn:length(userBoardList) > 0 }">
+			    	<c:forEach items="${userBoardList}" var="row">
+						<tr>
+							<td style="text-align: center;">
+								<c:out value="${row.IDX }"></c:out>
+							</td>
+							<td>
+								<a href="#" name="title"><c:out value="${row.TITLE}"></c:out></a>
+								<input type="hidden" id="IDX" value="${row.IDX }">
+							</td>
+							<td style="text-align: center;">
+							 	<c:out value="${row.HIT_CNT }"></c:out>
+							</td>
+							<td style="text-align: center;">
+							 	<c:out value="${row.CREA_DTM }"></c:out>
+							</td>
+						</tr>
+					</c:forEach>
+				</c:when>
+				
+				<c:otherwise>
+					<tr>
+						<td colspan="6" style="text-align: center;">조회된 결과가 없습니다.</td>
+					</tr>
+				</c:otherwise>
+				</c:choose>
+				</tbody>
+			</table>
+		  </div>
+		  
 		</div>
 	</div>
 </div>

@@ -82,7 +82,33 @@
     </div>
   </footer>
 <script type="text/javascript">
-
+	$(document).ready(function() {
+		var id = $("#header_id").val(); 
+		//alert(id);
+		if(id != null) fn_openPopup(id);
+		
+	});
+	
+	//안내 팝업 출력
+	function fn_openPopup(id) {
+		var userData = {"ID": id};
+		 $.ajax({
+		  async:false,
+		  type : "POST", 
+		  url : "${pageContext.request.contextPath}/user/openPopup.do", 
+		  data : userData,
+		  dataType : "json",
+		  error : function(error) {
+			    alert("서버가 응답하지 않습니다. \n다시 시도해주시기 바랍니다.");
+			   },
+		  success : function(i) {
+			 if(i != 0) {
+				 //alert(i);
+				 alert("회원님의 활동에 대한 제재 내역이 있습니다. \n자세한 사항은 내 활동에서 확인하세요.")
+			 }
+		  }  
+		 });
+	}
 </script>
 </body>
 </html>

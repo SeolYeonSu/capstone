@@ -1,0 +1,513 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<%@ include file="../header.jsp" %>
+</head>
+<body class="body-set">
+<div class="container col-lg-12 col-xs-12">
+<div class="row">
+	<div role="tabpanel">
+	  <!-- Nav tabs -->
+	  <ul class="nav nav-tabs" role="tablist">
+	    <li role="presentation" class="active"><a href="#waiting" aria-controls="waiting" role="tab" data-toggle="tab">신고처리 대기</a></li>
+	    <li role="presentation"><a href="#complete" aria-controls="complete" role="tab" data-toggle="tab">신고처리 완료</a></li>
+	    <li role="presentation"><a href="#log" aria-controls="log" role="tab" data-toggle="tab">로그 기록</a></li>
+	  </ul>
+	  
+	  <!-- Tab panes -->
+	  <div class="tab-content">
+		  <div role="tabpanel" class="tab-pane fade in active" id="waiting">
+		  	<table class="table table-hover" style="text-align:left; border:1px solid #dddddd; margin-top:20px;"> 
+				<thead>
+					<tr>
+						<th style="background-color: #eeeeee; text-align: center; width: 10%;">게시물 번호</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 20%;">신고된 아이디</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 20%;">신고 사유</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 20%;">최초 신고일</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 10%;">신고 횟수</th>
+						<th style="background-color: #eeeeee; text-align: center; width: *%;"></th>
+					</tr>
+				</thead>
+				<tbody>
+				<c:choose>
+			    <c:when test="${fn:length(list) > 0 }">
+			    	<c:forEach items="${list}" var="row">
+						<tr>
+							<td style="text-align: center;">
+								<h5><c:out value="${row.RP_IDX }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<h5><c:out value="${row.RP_RID }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<h5><c:out value="${row.RP_REASON}"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+							 	<h5><c:out value="${row.RP_DATE }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+							 	<h5><c:out value="${row.C }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+							 	<button type="button" name="reportBoard_btn" class="btn btn-success">처리하기</button>
+								<button type="button" name="userList_btn" class="btn btn-info">신고자 목록</button>				
+								<input type="hidden" id="RP_IDX" name="RP_IDX" value="${row.RP_IDX}">
+								<input type="hidden" id="RP_RID" name="RP_RID" value="${row.RP_RID}">
+								<input type="hidden" id="RP_REASON" name="RP_REASON" value="${row.RP_REASON}">
+								<input type="hidden" id="adminId" name="adminId" value="${loginInfo.ID}">
+							</td>
+						</tr>
+					</c:forEach>
+				</c:when>
+				
+				<c:otherwise>
+					<tr>
+						<td colspan="6" style="text-align: center;">조회된 결과가 없습니다.</td>
+					</tr>
+				</c:otherwise>
+				</c:choose>
+				</tbody>
+			</table>
+			
+			<!-- 신고 처리 모달  -->
+			<div class="modal fade bs-reporting-modal" id="reportBoardModal" tabindex="-1" role="dialog" aria-labelledby="reportBoardModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title">신고 처리</h4>
+			      </div>
+			      
+			      <div class="modal-body" style="height: 430px;">
+			      	<div id="reportBoardCon" style="height: 350px;"></div>
+			      	<div style="height:10px;"></div>
+			      	<div>
+			      		<div class="col-md-3"><h5>삭제여부</h5></div>
+			      		<div class="col-md-3"><input type="checkbox" id="checkDelete"></div>
+			      		<div class="col-md-3"><h5>활동정지</h5> </div>
+			      		<div class="col-md-3">
+			      			<select class="form-control" id="checkStop" style="width:100px; height:31px;">
+			      				<option>없음</option>
+								<option>3일</option>
+								<option>7일</option>
+								<option>15일</option>
+								<option>30일</option>
+								<option>영구</option>
+							</select>
+						</div>		      		
+			      	</div>
+			      </div>
+			      <div class="modal-footer">
+			       	<button type="button" class="btn btn-success" id="reportProcess_btn">처리하기</button>
+			       	<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+			      </div>
+			    </div>
+			  </div>
+			 </div>
+			<!-- 신고 처리 모달 끝 -->
+			
+			<!-- 신고자 목록 모달  -->
+			<div class="modal fade bs-list-modal-sm" id="userListModal" tabindex="-1" role="dialog" aria-labelledby="userListModalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-sm">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title">신고자 목록</h4>
+			      </div>		
+			      <div class="modal-body" id="userListModalBody"></div>			      
+			      <div class="modal-footer">
+			       	<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+			      </div>
+			    </div>
+			  </div>
+			 </div>
+			<!-- 신고자 목록 모달 끝 -->
+		  </div>
+		  <!-- Tab panes end -->
+		  
+		  <!-- Tab panes 2 -->
+		  <div role="tabpanel" class="tab-pane fade" id="complete">
+		  	<table class="table table-hover" style="text-align:left; border:1px solid #dddddd; margin-top:20px;"> 
+				<thead>
+					<tr>
+						<th style="background-color: #eeeeee; text-align: center; width: 10%;">처리 번호</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 10%;">게시글 번호</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 10%;">회원 아이디</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 10%;">사유</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">처리 시간</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 10%;">관리자 아이디</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 10%;">삭제여부</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 10%;">활동정지</th>
+						<th style="background-color: #eeeeee; text-align: center; width: *%;"></th>
+					</tr>
+				</thead>
+				<tbody>
+				<c:choose>
+			    <c:when test="${fn:length(list2) > 0 }">
+			    	<c:forEach items="${list2}" var="row2">
+						<tr>
+							<td style="text-align: center;">
+								<h5><c:out value="${row2.RPC_INDEX }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<h5><c:out value="${row2.RPC_IDX }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<h5><c:out value="${row2.RPC_ID }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<h5><c:out value="${row2.RPC_REASON }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<h5><c:out value="${row2.RPC_DATE }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<h5><c:out value="${row2.RPC_ADMIN }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<h5><c:out value="${row2.RPC_DELETE }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<h5><c:out value="${row2.RPC_STOP }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<button type="button" name="RpComBoard_btn" class="btn btn-default">게시글 보기</button>				
+								<input type="hidden" id="RPC_INDEX" name="RPC_INDEX" value="${row2.RPC_INDEX}">
+								<input type="hidden" id="RPC_IDX" name="RPC_IDX" value="${row2.RPC_IDX}">
+								<input type="hidden" id="RPC_DELETE" name="RPC_DELETE" value="${row2.RPC_DELETE}">
+								<input type="hidden" id="RPC_ADMIN" name="RPC_ADMIN" value="${row2.RPC_ADMIN}">
+								<input type="hidden" id="loginId" name="loginId" value="${loginInfo.ID}">
+							</td>
+						</tr>
+					</c:forEach>
+				</c:when>
+				
+				<c:otherwise>
+					<tr>
+						<td colspan="8" style="text-align: center;">조회된 결과가 없습니다.</td>
+					</tr>
+				</c:otherwise>
+				</c:choose>
+				</tbody>
+			</table>
+			
+			<!-- 신고 처리 수정 모달  -->
+			<div class="modal fade bs-rpCom-modal" id="rpComBoardModal" tabindex="-1" role="dialog" aria-labelledby="rpComBoardModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title">게시글 보기</h4>
+			      </div>
+			      
+			      <div class="modal-body" style="height: 430px;">
+			      	<div id="rpComBoardCon" style="height: 350px;"></div>
+			      	<div style="height:10px;"></div>
+			      	<div>
+			      		<div class="col-md-3"><h5>삭제여부</h5></div>
+			      		<div class="col-md-3"><input type="checkbox" id="checkDelete2"></div>
+			      		<!--  
+			      		<div class="col-md-3"><h5>활동정지</h5> </div>
+			      		<div class="col-md-3">
+			      			<select class="form-control" id="checkStop2" style="width:100px; height:31px;">
+			      				<option>없음</option>
+								<option>3일</option>
+								<option>7일</option>
+								<option>15일</option>
+								<option>30일</option>
+								<option>영구</option>
+							</select>
+						</div>		
+						-->      		
+			      	</div>
+			      </div>
+			      <div class="modal-footer">
+			       	<button type="button" class="btn btn-success" id="rpComProcess_btn">수정하기</button>
+			       	<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+			      </div>
+			    </div>
+			  </div>
+			 </div>
+			<!-- 신고 처리 수정 모달 끝 -->
+		  </div>
+		  <!-- Tab panes 2 end -->
+		  
+		  <div role="tabpanel" class="tab-pane fade" id="log">
+		  	<table class="table table-hover" style="text-align:left; border:1px solid #dddddd; margin-top:20px;"> 
+				<!-- <thead>
+					<tr>
+						<th style="background-color: #eeeeee; text-align: center; width: 13%;">번호</th>
+						<th style="background-color: #eeeeee; text-align: left; width: *;">제목</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">조회수</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">작성일</th>
+					</tr>
+				</thead> -->
+				<tbody>
+				<c:choose>
+			    <c:when test="${fn:length(userBoardList) > 0 }">
+			    	<c:forEach items="${userBoardList}" var="row">
+						<tr>
+							<td style="text-align: center;">
+								<c:out value="${row.IDX }"></c:out>
+							</td>
+							<td>
+								<a href="#" name="title"><c:out value="${row.TITLE}"></c:out></a>
+								<input type="hidden" id="IDX" value="${row.IDX }">
+							</td>
+							<td style="text-align: center;">
+							 	<c:out value="${row.HIT_CNT }"></c:out>
+							</td>
+							<td style="text-align: center;">
+							 	<c:out value="${row.CREA_DTM }"></c:out>
+							</td>
+						</tr>
+					</c:forEach>
+				</c:when>
+				
+				<c:otherwise>
+					<tr>
+						<td colspan="6" style="text-align: center;">조회된 결과가 없습니다.</td>
+					</tr>
+				</c:otherwise>
+				</c:choose>
+				</tbody>
+			</table>
+		  </div>
+		  
+		</div>
+	</div>
+</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() { 
+	var selectIDX;
+	var selectRID;
+	var selectIndex;
+	var selectAdmin;
+	var selectLoginid;
+	var selectReason;
+	
+	 $('[name="userList_btn"]').unbind("click").click(function(e) {
+		   e.preventDefault();
+		   fn_openUserList($(this));    
+	  });
+	 
+	 $('[name="reportBoard_btn"]').unbind("click").click(function(e) {
+		   e.preventDefault();
+		   var obj = $(this);
+		   selectIDX = obj.parent().find("#RP_IDX").val();
+		   selectRID = obj.parent().find("#RP_RID").val();
+		   selectReason = obj.parent().find("#RP_REASON").val();
+		   fn_openReportBoard($(this)); 		   
+	  });
+	 
+	 $("#reportProcess_btn").unbind("click").click(function(e) {
+		   e.preventDefault();
+		   fn_reportProcess(selectIDX, selectRID, selectReason);
+	
+	  });
+	 
+	 $('[name="RpComBoard_btn"]').unbind("click").click(function(e) {
+		   e.preventDefault();
+		   var obj = $(this);
+		   selectIndex = obj.parent().find("#RPC_INDEX").val();
+		   selectIDX = obj.parent().find("#RPC_IDX").val();
+		   selectAdmin = obj.parent().find("#RPC_ADMIN").val();
+		   selectLoginid = obj.parent().find("#loginId").val();
+		   fn_openRpComBoard($(this)); 		   
+	  });
+	 
+	 $("#rpComProcess_btn").unbind("click").click(function(e) {
+		   e.preventDefault();
+		   fn_RpComUpdate(selectIndex, selectIDX, selectAdmin, selectLoginid);
+	
+	  });
+	 
+	 //페이지 새로고침 할때 활성화된 탭 유지
+	 if (location.hash) {
+         $("a[href='" + location.hash + "']").tab("show");
+     }
+     $(document.body).on("click", "a[data-toggle='tab']", function(event) {
+         location.hash = this.getAttribute("href");
+     });
+     
+     $(window).on("popstate", function() {
+   	     var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
+   	     $("a[href='" + anchor + "']").tab("show");
+   	 });
+});
+
+//신고자 목록창 열기 
+function fn_openUserList(obj) {
+	var idx = obj.parent().find("#RP_IDX").val();
+	var listData = {"IDX": idx};
+
+	 $.ajax({
+	  async:false,
+	  type : "POST", 
+	  url : "${pageContext.request.contextPath}/admin/openUserList.do", 
+	  data : listData,
+	  dataType : "json",
+	  error : function(error) {
+		    alert("서버가 응답하지 않습니다. \n다시 시도해주시기 바랍니다.");
+		   },
+	  success : function(data) {
+		  var text ="";
+		  $.each(data, function() {
+			  var rp_id = this.RP_ID;
+			  text += "<h4>" + rp_id + "</h4>";
+			});
+
+		  $("#userListModalBody").empty();
+	  	  $("#userListModalBody").append(text);
+	   	  $('#userListModal').modal('show');
+	  }  
+	 });
+}
+
+//신고 처리창 열기
+function fn_openReportBoard(obj) {
+	var idx = obj.parent().find("#RP_IDX").val();
+	var listData = {"IDX": idx};
+
+	 $.ajax({
+	  async:false,
+	  type : "POST", 
+	  url : "${pageContext.request.contextPath}/admin/openReportBoard.do", 
+	  data : listData,
+	  dataType : "json",
+	  error : function(error) {
+		    alert("서버가 응답하지 않습니다. \n다시 시도해주시기 바랍니다.");
+		   },
+	  success : function(data) {
+		  var text ="";
+		  $.each(data, function() {
+			  var title = "제목 : " + this.TITLE + "<br>";
+			  var contents = "내용 : " + this.CONTENTS;
+			  text += "<h4>" + title + contents + "</h4>";
+			});
+
+		  $("#reportBoardCon").empty();
+	  	  $("#reportBoardCon").append(text);
+	   	  $('#reportBoardModal').modal('show');	   	  
+	  }  
+	 });
+} 
+
+//신고 처리하기
+function fn_reportProcess(selectIDX, selectRID, selectReason) {
+	var checkDelete;
+	var deleteState;
+	var rpc_check;
+	var checked = $('input:checkbox[id="checkDelete"]').is(":checked");
+	if(checked == true) {
+		checkDelete = "O";
+		deleteState = "Y";
+		rpc_check = 0;
+	}
+	else if(checked == false) {
+		checkDelete = "X";
+		deleteState = "N";
+		rpc_check = 1;
+	}
+	var checkStop = $('#checkStop option:selected').text();
+	var adminId = $('#adminId').val();
+	
+	$('#reportBoardModal').modal('hide');
+	
+	var comSubmit = new ComSubmit();
+	comSubmit.setUrl("<c:url value='/admin/reportProcess.do' />");
+	comSubmit.addParam("IDX", selectIDX);
+	comSubmit.addParam("ID", selectRID);
+	comSubmit.addParam("ADMINID", adminId);
+	comSubmit.addParam("CHECKDELETE", checkDelete);
+	comSubmit.addParam("DELETESTATE", deleteState);
+	comSubmit.addParam("CHECKSTOP", checkStop);
+	comSubmit.addParam("REASON", selectReason);
+	comSubmit.submit();
+} 
+
+//신고 처리완료 게시글 열기
+function fn_openRpComBoard(obj) {
+	var idx = obj.parent().find("#RPC_IDX").val();
+	var checked = obj.parent().find("#RPC_DELETE").val();
+	var listData = {"IDX": idx};
+	if(checked == "O") $("input:checkbox[id='checkDelete2']").prop("checked", true);
+	else if(checked == "X") $("input:checkbox[id='checkDelete2']").prop("checked", false);
+
+	 $.ajax({
+	  async:false,
+	  type : "POST", 
+	  url : "${pageContext.request.contextPath}/admin/openReportBoard.do", 
+	  data : listData,
+	  dataType : "json",
+	  error : function(error) {
+		    alert("서버가 응답하지 않습니다. \n다시 시도해주시기 바랍니다.");
+		   },
+	  success : function(data) {
+		  var text ="";
+		  $.each(data, function() {
+			  var title = "제목 : " + this.TITLE + "<br>";
+			  var contents = "내용 : " + this.CONTENTS;
+			  text += "<h4>" + title + contents + "</h4>";
+			});
+
+		  $("#rpComBoardCon").empty();
+	  	  $("#rpComBoardCon").append(text);  	    
+	   	  $('#rpComBoardModal').modal('show');	   	  
+	  }  
+	 });
+} 
+
+//신고 처리완료 수정하기
+function fn_RpComUpdate(selectIndex, selectIDX, selectAdmin, selectLoginid) {
+	var checkDelete;
+	var deleteState;
+	var checked = $('input:checkbox[id="checkDelete2"]').is(":checked");
+	if(checked == true) {
+		checkDelete = "O";
+		deleteState = "Y";
+	}
+	else if(checked == false) {
+		checkDelete = "X";
+		deleteState = "N";
+	}
+	var listData = {"INDEX": selectIndex, "IDX": selectIDX, "CHECKDELETE": checkDelete, "DELETESTATE": deleteState};
+	
+	if(selectAdmin == selectLoginid) {
+		$('#rpComBoardModal').modal('hide');
+		
+		$.ajax({
+			async:false,
+		    type : "POST", 
+		    url : "${pageContext.request.contextPath}/admin/updateRpcom.do", 
+		    data : listData,
+		    dataType : "json",
+		    error : function(error) {
+			    alert("서버가 응답하지 않습니다. \n다시 시도해주시기 바랍니다.");
+		    },
+		    success : function() {
+		    	$('#rpComBoardModal').modal('hide');
+			    alert("처리되었습니다.");
+			    location.reload();
+		    }
+		});
+		
+	}
+	
+	else {
+		$('#rpComBoardModal').modal('hide');
+		alert("권한이 없습니다.");
+	}	 
+} 
+
+
+</script>
+
+</body>
+</html>

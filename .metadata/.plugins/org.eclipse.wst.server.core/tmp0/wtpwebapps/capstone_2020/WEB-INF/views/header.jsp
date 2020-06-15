@@ -78,6 +78,7 @@
 									<li role="presentation" class="divider"></li>
 									<li><a href="#" id="logoutBtn">로그아웃</a></li>
 								</ul>
+								<input type="hidden" id="header_id" name="header_id" value="${loginInfo.ID}">
 							</c:when>
 							<c:otherwise>
 								<span class="glyphicon glyphicon-user"></span>
