@@ -51,16 +51,16 @@ public class AdminController {
        adminService.insertRpCompleted(commandMap.getMap());
        
        String day = (String)commandMap.get("CHECKSTOP");
-       if(!(day.equals("없음"))) {
-    	   Map<String,Object> select_map = adminService.selectUserStop(commandMap.getMap()); 
-    	   if(select_map == null) {
-    		   adminService.insertUserStop(commandMap.getMap());
+       if(!(day.equals("없음"))) {  																// 신고 처리 시 활동정지 '3일' 이상, '영구' 이면 
+    	   Map<String,Object> select_map = adminService.selectUserStop(commandMap.getMap());    // 기존 활동정지 내용이 있는지 가져옴
+    	   if(select_map == null) {																// 기존 활동정지 내용이 없으면	
+    		   adminService.insertUserStop(commandMap.getMap());								// 활동정지 정보를 새로 입력함 
     	   }
-    	   else {
-        	   String select_day = (String) select_map.get("US_DAY");
-    		   if(select_day.equals("영구")) {}
+    	   else {																				// 기존 활동정지 내용이 있으면
+        	   String select_day = (String) select_map.get("US_DAY");	                        // 기존 활동정지 일수를 가졍옴
+    		   if(select_day.equals("영구")) {}													// '영구'정지 이면 아무것도 하지않음
     		   else {
-    			   int num1 = Integer.parseInt(day.substring(0, 1));
+    			   int num1 = Integer.parseInt(day.substring(0, 1));						    // 기존 활동정지 일수 + 새로운 활동정지 일수 후 업데이트
     			   int num2 = Integer.parseInt(select_day.substring(0, 1));
     			   int sum = num1 + num2;
     			   String new_day = Integer.toString(sum) + "일";

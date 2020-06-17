@@ -81,7 +81,7 @@
     <![CDATA[
         UPDATE USERSTOP
         SET
-            US_START_TIME = #{START}
+            US_START_TIME = NOW()
         WHERE
             US_ID = #{ID}
     ]]>

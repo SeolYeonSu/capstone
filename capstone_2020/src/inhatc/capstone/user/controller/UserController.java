@@ -1,6 +1,12 @@
 package inhatc.capstone.user.controller;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 
 
 import javax.annotation.Resource;
@@ -140,8 +146,42 @@ public class UserController {
 		 @RequestMapping(value="/user/openPopup.do")
 		 @ResponseBody
 		 public int openPopup(CommandMap commandMap) throws Exception {
-			 int checkResult = userService.selectRpcCheck(commandMap.getMap());
-			 if(checkResult != 0) userService.updateRpcCheck(commandMap.getMap());
-			 return checkResult;
+			 int checkResult = userService.selectRpcCheck(commandMap.getMap());					// 안내 할것이 있는지 확인함, 리턴값 : check == 0 의 개수
+			 if(checkResult != 0) userService.updateRpcCheck(commandMap.getMap());				// 있으면 check = 1 로 업데이트
+			 
+			 Map<String,Object> select_map = userService.selectUserStop(commandMap.getMap());   // 활동정지 내역을 확인함
+			 if(select_map != null) {															// 활동정지 내역이 있다
+				 if(select_map.get("US_START_TIME") == null) {									// 시작일이 없으면
+					 userService.updateUsStart(commandMap.getMap());                            // 지금시간을 시작일로 업데이트
+				 }
+				 
+				 Calendar cal = Calendar.getInstance();											// 형변환에 필요한 변수 선언
+			 	 DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		         Date date = null;
+		         
+		         select_map = userService.selectUserStop(commandMap.getMap());					// 활동정지 내역을 갱신함
+				 String select_day = (String) select_map.get("US_DAY");							// 활동정지 기간 
+				 String select_start = df.format(select_map.get("US_START_TIME"));				// 활동정지 시작 시간
+				 String select_end = null;														// 활동정지 종료 시간
+				 int day = 0;		        													// 활동정지 일수를 담을 임시 변수
+				 
+				 date = df.parse(select_start);													// 시작 시간 형변환
+			     cal.setTime(date);				 												// cal 객체에 넣음
+			     
+				 if(select_day.equals("영구")) {													// 영구 정지일 경우 100년을 더함 
+					 cal.add(Calendar.YEAR, 100);
+				 }
+				 else {
+					 int inx = select_day.indexOf("일");											// '일' 글자의 인덱스 값을 가져옴
+					 String select_day_sub = select_day.substring(0, inx);                      // '일' 글자를 기준으로 앞에 숫자를 분리함
+					 day = Integer.parseInt(select_day_sub, 10);                                // 숫자를 int형으로 형변환
+					 cal.add(Calendar.DATE, day);			                                    // 일수를 더함
+				 }
+				 				 
+				 select_end = df.format(cal.getTime()).toString();								// 계산한 시간을 string으로 형변환 
+				 commandMap.put("END", select_end);												// 맵에 추가
+				 userService.updateUsEnd(commandMap.getMap());                                  // 활동정지 종료 시간 업데이트				 
+	    	 }
+			 return checkResult;															  	// 안내 여부를 리턴함, checkResult이 1 이상이면 안내함, 0 이면 안내하지 않음
 		 }
 }

@@ -1,0 +1,196 @@
+package inhatc.capstone.user.controller;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.sql.Date;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
+
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import inhatc.capstone.common.map.CommandMap;
+import inhatc.capstone.user.dto.UserDTO;
+import inhatc.capstone.user.service.UserService;
+
+
+@Controller
+public class UserController {
+	
+
+	Logger log = Logger.getLogger(this.getClass());
+	 
+		@Resource(name="userService")
+		 private UserService userService;
+		 
+		 
+		 
+		 @RequestMapping(value="/user/openSignUp.do")
+		 public ModelAndView openSignUp(CommandMap commandMap) throws Exception {
+			 System.out.println("");
+		  ModelAndView mav = new ModelAndView("/user/signUp");
+
+		  return mav;
+		 }
+		 
+		 
+		 @RequestMapping(value="/user/checkUserID.do")
+		 @ResponseBody
+		 public int checkUserID(CommandMap commandMap) throws Exception {
+			 System.out.println("in");
+			 int checkResult = userService.selectUserID(commandMap.getMap());
+			 return checkResult;
+		 }
+		 
+		 @RequestMapping(value="/user/signUp.do")
+		 public ModelAndView signUp(CommandMap commandMap ) throws Exception {
+		  userService.insertUserData(commandMap.getMap());
+		  
+		  ModelAndView mav = new ModelAndView("/user/loginSuccess");//회원가입 완료 창을 보여주자
+		  mav.addObject("msg", "정상적으로 회원가입이 되었습니다.");
+		  
+		  return mav;
+		 }
+		 
+		 @RequestMapping(value="/user/openLogin.do")
+		 public ModelAndView openLogin(HttpServletRequest request, HttpServletResponse response, CommandMap commandMap) throws Exception {
+		  ModelAndView mav = new ModelAndView();
+		  
+		  //세션정보가 null이 아닐 때
+		  if (request.getSession().getAttribute("loginInfo") != null)
+		  {
+		   String msg = "이미 로그인된 상태입니다."; //사실상 쓸모 없는 기능( 로그인하면 로그인 버튼이 안보임)
+		   mav.addObject("msg", msg);
+		   mav.setViewName("/user/loginSuccess"); //성공이라기보단 메인페이지 쪽으로 이동하게만들기(보류)
+		  }
+		  else
+		  {
+		   mav.setViewName("/user/login");
+		  } 
+		  return mav;
+		 }
+		 
+		 @RequestMapping(value="/user/loginTry.do")
+		 public ModelAndView login(HttpServletRequest request, CommandMap commandMap) throws Exception {
+		  
+		  //UserDTO userInfo = userService.selectUserInfo(commandMap.getMap());
+		  Map<String, Object> map = userService.selectUserInfo(commandMap.getMap());
+		  
+		  
+		  //로그인 정보가 있다면 로그인
+		  if (map == null)
+		  {
+			  ModelAndView mav = new ModelAndView("redirect:/user/loginfail.do");
+			  mav.addObject("msg", "로그인에 실패하였습니다.");
+			  return mav;
+		  }
+		  else
+		  {
+			  //HttpSession httpSession = request.getSession(true);
+			  
+			  //httpSession.setAttribute("loginInfo", userInfo);
+			  //UserDTO userDTO = (UserDTO) httpSession.getAttribute("loginInfo"); //다른 곳에서 사용 법 
+			  
+			  
+			  
+			  request.getSession().setAttribute("loginInfo", map);
+			  request.getSession().setMaxInactiveInterval(60*30); //세션 사라지는 시간
+			  ModelAndView mav = new ModelAndView("/home");
+			  mav.addObject("msg", "로그인에 성공하였습니다.");
+			  //mav.addObject("userInfo",userInfo);
+			  return mav;
+		  }  
+		  
+		 }
+		 
+		 @RequestMapping(value="/user/loginfail.do")
+		 public ModelAndView reLogin(HttpServletRequest request, HttpServletResponse response, CommandMap commandMap) throws Exception {
+			  ModelAndView mav = new ModelAndView();
+			  
+			  
+			  //mav.addObject("msg", "로그인에 실패하였습니다."); //jsp에서 메세지가 있을때만 표시할 수 있게 하는거 만들기(미완)
+			  mav.setViewName("/user/login");
+			  
+			  return mav;
+			 }
+		 
+		 @RequestMapping(value="/user/logoutTry.do")
+		 public ModelAndView logout(HttpServletRequest request) throws Exception {
+		  request.getSession().removeAttribute("loginInfo"); //세션 종료
+		  
+		  ModelAndView mav = new ModelAndView("/user/logout");
+		  mav.addObject("msg", "로그아웃되었습니다.");
+		  
+		  return mav;
+		 }
+
+		 @RequestMapping(value="/user/needLogin.do")
+		 public ModelAndView needLogin() throws Exception {
+		  ModelAndView mav = new ModelAndView("/user/loginWarning");
+		  mav.addObject("msg", "로그인 후 이용해주시기 바랍니다.");
+		 
+		  return mav;
+		 }
+		 
+		 @RequestMapping(value="/user/openPopup.do")
+		 @ResponseBody
+		 public int openPopup(CommandMap commandMap) throws Exception {
+			 int checkResult = userService.selectRpcCheck(commandMap.getMap());					// 안내 할것이 있는지 확인함, 리턴값 : check == 0 의 개수
+			 if(checkResult != 0) userService.updateRpcCheck(commandMap.getMap());				// 있으면 check = 1 로 업데이트
+			 
+			 Map<String,Object> select_map = userService.selectUserStop(commandMap.getMap());   // 활동정지 내역을 확인함
+			 if(select_map != null) {															// 활동정지 내역이 있다
+				 if(select_map.get("US_START_TIME") == null) {									// 시작일이 없으면
+					 userService.updateUsStart(commandMap.getMap());                            // 지금시간을 시작일로 업데이트
+				 }
+				 
+				 
+				 Calendar cal = Calendar.getInstance();
+			 	 DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		         Date date = null;
+		         
+		         select_map = userService.selectUserStop(commandMap.getMap());
+				 String select_day = (String) select_map.get("US_DAY");
+				 //String select_start = (String) select_map.get("US_START_TIME");
+				 String select_end = null;
+				 int day = 0;
+				 
+				 
+		         try {
+		             date = (Date) df.parse(select_map.get("US_DAY"));
+		        	 //cal.setTime((java.util.Date) select_map.get("US_START_TIME"));
+		         } 
+		         catch (ParseException e) {
+		             e.printStackTrace();
+		         }
+			     cal.setTime(date);
+				 
+				 if(select_day == "영구") {
+					 cal.add(Calendar.YEAR, 100);
+				 }
+				 else {
+					 day = Integer.parseInt(select_day.substring(0, 1), 10);
+					 cal.add(Calendar.DATE, day);			 
+				 }
+				 
+				 
+				 select_end = df.format(cal.getTime()).toString();
+				 System.out.println(select_end);
+				 
+				 commandMap.put("END", select_end);
+				 userService.updateUsEnd(commandMap.getMap());
+				 
+	    	 }
+			 return checkResult;															  	// 안내 여부를 리턴함, checkResult이 1 이상이면 안내함, 0 이면 안내하지 않음
+		 }
+}
