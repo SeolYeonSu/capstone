@@ -461,12 +461,16 @@ public class MovieController {
 	  List<Map<String,Object>> list = movieService.selectUserRating(commandMap);
 	  Map<String,Object> info = movieService.selectUserRating2(commandMap);
 	  List<Map<String,Object>> userBoardList = movieService.selectUserBoard(commandMap);
+	  Map<String,Object> userStop = movieService.selectUserStop(commandMap);
+	  List<Map<String,Object>> userReport = movieService.selectUserReport(commandMap);
 	  
 	  
 	  ModelAndView mv = new ModelAndView("/user/activity");
 	  mv.addObject("list", list);
 	  mv.addObject("info", info);
 	  mv.addObject("userBoardList",userBoardList);
+	  mv.addObject("userStop",userStop);
+	  mv.addObject("userReport",userReport);
 	  return mv;
 	 }
 }

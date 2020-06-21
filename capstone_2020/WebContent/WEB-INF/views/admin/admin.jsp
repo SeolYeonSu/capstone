@@ -224,16 +224,17 @@
 		  </div>
 		  <!-- Tab panes 2 end -->
 		  
+		  <!-- Tab panes 3 start --> <!--
 		  <div role="tabpanel" class="tab-pane fade" id="log">
 		  	<table class="table table-hover" style="text-align:left; border:1px solid #dddddd; margin-top:20px;"> 
-				<!-- <thead>
+				<thead>
 					<tr>
 						<th style="background-color: #eeeeee; text-align: center; width: 13%;">번호</th>
 						<th style="background-color: #eeeeee; text-align: left; width: *;">제목</th>
 						<th style="background-color: #eeeeee; text-align: center; width: 15%;">조회수</th>
 						<th style="background-color: #eeeeee; text-align: center; width: 15%;">작성일</th>
 					</tr>
-				</thead> -->
+				</thead> 
 				<tbody>
 				<c:choose>
 			    <c:when test="${fn:length(userBoardList) > 0 }">
@@ -264,7 +265,8 @@
 				</c:choose>
 				</tbody>
 			</table>
-		  </div>
+		  </div> -->
+		  <!-- Tab panes 3 end -->
 		  
 		</div>
 	</div>

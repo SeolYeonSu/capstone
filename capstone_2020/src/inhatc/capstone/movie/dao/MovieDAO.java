@@ -135,4 +135,16 @@ public class MovieDAO extends AbstractDAO{
 		return (List<Map<String, Object>>) selectList("movie.selectUserBoard", map);
 	}
 	
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> selectUserStop(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return (Map<String, Object>) selectOne("movie.selectUserStop", map);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectUserReport(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return (List<Map<String, Object>>) selectList("movie.selectUserReport", map);
+	}
+	
 }

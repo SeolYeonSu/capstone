@@ -373,4 +373,18 @@ public class MovieServiceImpl implements MovieService{
 		List<Map<String, Object>> resultMap = movieDAO.selectUserBoard(map);
 		return resultMap;
 	}
+
+	@Override
+	public Map<String, Object> selectUserStop(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		Map<String, Object> resultMap = movieDAO.selectUserStop(map);
+		return resultMap;
+	}
+
+	@Override
+	public List<Map<String, Object>> selectUserReport(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		List<Map<String, Object>> resultMap = movieDAO.selectUserReport(map);
+		return resultMap;
+	}
 }

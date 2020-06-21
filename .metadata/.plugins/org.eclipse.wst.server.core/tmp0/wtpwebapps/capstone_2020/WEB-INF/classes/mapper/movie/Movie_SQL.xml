@@ -250,4 +250,34 @@
             	CREA_ID = #{ID}
         ]]>
     </select>
+    
+     <select id="selectUserStop" parameterType="hashmap" resultType="hashmap">
+    	<![CDATA[
+            SELECT
+            	US_DAY,
+            	US_START_TIME,
+            	US_END_TIME
+            FROM
+                USERSTOP
+            WHERE
+            	US_ID = #{ID}
+        ]]>
+    </select>
+    
+     <select id="selectUserReport" parameterType="hashmap" resultType="hashmap">
+    	<![CDATA[
+            SELECT
+            	RPC_IDX,
+            	RPC_DATE,
+            	RPC_REASON,
+            	RPC_DELETE,
+            	RPC_STOP
+            FROM
+                RPCOMPLETED
+            WHERE
+            	RPC_ID = #{ID}
+           	AND
+           		(RPC_DELETE = 'O' OR RPC_STOP <> '없음')
+        ]]>
+    </select>
 </mapper>

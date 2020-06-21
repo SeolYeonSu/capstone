@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+						"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="movie">
+	<select id="selectRecoMovie" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT
+                MOVIEID,
+                MOVIESEQ,
+                MOVIE_NAME,
+                IMG
+            FROM
+                RATINGS_MV
+            WHERE
+                DOCID = #{DOCID}
+            GROUP BY DOCID
+        ]]>
+    </select>
+    <select id="selectCommentMovie" parameterType="hashmap" resultType="hashmap">
+        <![CDATA[
+            SELECT
+            	IDX,
+                CREA_ID,
+                date_format(CREA_DTM,'%y.%m.%d %h:%i') CREA_DTM,
+                COMMENTS,
+                COMMENTS_LIKE
+            FROM
+                MV_COMMENT
+            WHERE
+                DOCID = #{DOCID}
+            ORDER BY
+            	CREA_DTM desc;
+        ]]>
+    </select>
+    <select id="selectCommentLikeCheck" parameterType="hashmap" resultType="hashmap">
+    	<![CDATA[
+            SELECT
+            	COUNT(PARENT_IDX) RESULT
+            FROM
+                MV_COMMENT_LIKE
+            WHERE
+                PARENT_IDX = #{PARENT_IDX}
+                AND
+                CLICK_ID = #{CLICK_ID}
+        ]]>
+    </select>
+    <delete id="deleteCommentLike" parameterType="hashmap">
+    	<![CDATA[
+            DELETE
+            FROM
+                MV_COMMENT_LIKE
+            WHERE
+                PARENT_IDX = #{PARENT_IDX}
+                AND
+                CLICK_ID = #{CLICK_ID}
+        ]]>
+    </delete>
+    <update id="updateCommentLikeMinus" parameterType="hashmap">
+    	<![CDATA[
+            UPDATE
+            	MV_COMMENT
+            SET
+                COMMENTS_LIKE = coalesce(COMMENTS_LIKE, 0) - 1
+            WHERE
+                IDX = #{PARENT_IDX}
+        ]]>
+    </update>
+    <insert id="insertCommentLike" parameterType="hashmap">
+    	<![CDATA[
+            INSERT INTO MV_COMMENT_LIKE
+            VALUES
+            	(
+            	#{PARENT_IDX},
+            	#{CLICK_ID}
+            	)
+        ]]>
+    </insert>
+    <update id="updateCommentLikePlus" parameterType="hashmap">
+    	<![CDATA[
+            UPDATE
+            	MV_COMMENT
+            SET
+                COMMENTS_LIKE = coalesce(COMMENTS_LIKE, 0) + 1
+            WHERE
+                IDX = #{PARENT_IDX}
+        ]]>
+    </update>
+    <select id="selectCommentLike" parameterType="hashmap" resultType="hashmap">
+    	<![CDATA[
+            SELECT
+            	COMMENTS_LIKE
+            FROM
+                MV_COMMENT
+            WHERE
+                IDX = #{PARENT_IDX}
+        ]]>
+    </select>
+    <insert id="insertComment" parameterType="hashmap">
+    	<![CDATA[
+            INSERT INTO MV_COMMENT
+            	(
+            	DOCID,
+            	CREA_ID,
+            	COMMENTS,
+            	COMMENTS_LIKE
+            	)
+            VALUES
+            	(
+            	#{DOCID},
+            	#{CREA_ID},
+            	#{COMMENTS},
+            	0
+            	)
+        ]]>
+    </insert>
+    <select id="selectMovieRating" parameterType="hashmap" resultType="hashmap">
+    	<![CDATA[
+            SELECT
+            	COUNT(DOCID) RESULT
+            FROM
+                RATINGS_MV
+            WHERE
+                DOCID = #{DOCID}
+                AND
+                ID = #{ID}
+        ]]>
+    </select>
+    <update id="updateMovieRating" parameterType="hashmap">
+    	<![CDATA[
+            UPDATE
+            	RATINGS_MV
+            SET
+                RATINGS = #{RATINGS}
+            WHERE
+                DOCID = #{DOCID}
+                AND
+                ID = #{ID}
+        ]]>
+    </update>
+    <insert id="insertMovieRating" parameterType="hashmap">
+    	<![CDATA[
+            INSERT INTO RATINGS_MV
+            	(
+            	DOCID,
+            	MOVIEID,
+            	MOVIESEQ,
+            	ID,
+            	RATINGS,
+            	MOVIE_NAME,
+            	MOVIE_GENRES,
+            	IMG
+            	)
+            VALUES
+            	(
+            	#{DOCID},
+            	#{MOVIEID},
+            	#{MOVIESEQ},
+            	#{ID},
+            	#{RATINGS},
+            	#{MOVIE_NAME},
+            	#{MOVIE_GENRES},
+            	#{IMG}
+            	)
+        ]]>
+    </insert>
+    <select id="selectRatingAVG" parameterType="hashmap" resultType="hashmap">
+    	<![CDATA[
+            SELECT
+            	IFNULL (AVG(RATINGS),0) RESULT
+            FROM
+                RATINGS_MV
+            WHERE
+                DOCID = #{DOCID}
+        ]]>
+    </select>
+    <select id="selectRatingTotal" parameterType="hashmap" resultType="hashmap">
+    	<![CDATA[
+            SELECT
+            	COUNT(*) RESULT
+            FROM
+                RATINGS_MV
+            WHERE
+                DOCID = #{DOCID}
+        ]]>
+    </select>
+    <select id="selectRatingEach" parameterType="hashmap" resultType="hashmap">
+    	<![CDATA[
+            SELECT
+            	RATINGS,
+            	COUNT(*) RT_CNT
+            FROM
+                RATINGS_MV
+            WHERE
+                DOCID = #{DOCID}
+            GROUP BY RATINGS
+            ORDER BY RATINGS DESC
+        ]]>
+    </select>
+    <select id="selectRatingUser" parameterType="hashmap" resultType="hashmap">
+    	<![CDATA[
+            SELECT
+            	RATINGS
+            FROM
+                RATINGS_MV
+            WHERE
+                DOCID = #{DOCID}
+            	AND
+            	ID = #{ID}
+        ]]>
+    </select>
+    <select id="selectUserRating" parameterType="hashmap" resultType="hashmap">
+    	<![CDATA[
+            SELECT
+            	DOCID,
+            	MOVIEID,
+            	MOVIESEQ,
+            	RATINGS,
+            	MOVIE_NAME,
+            	IMG
+            FROM
+                RATINGS_MV
+            WHERE
+            	ID = #{ID}
+        ]]>
+    </select>
+    
+    <select id="selectUserRating2" parameterType="hashmap" resultType="hashmap">
+    	<![CDATA[
+            SELECT
+            	COUNT(RATINGS) AS C,
+            	ROUND(AVG(RATINGS)) AS A
+            FROM
+                RATINGS_MV
+            WHERE
+            	ID = #{ID}
+        ]]>
+    </select>
+    <select id="selectUserBoard" parameterType="hashmap" resultType="hashmap">
+    	<![CDATA[
+            SELECT
+            	IDX,
+            	TITLE,
+            	HIT_CNT,
+            	date_format(CREA_DTM,'%y.%m.%d') CREA_DTM
+            FROM
+                TB_BOARD
+            WHERE
+            	DEL_GB='N'
+            	AND
+            	CREA_ID = #{ID}
+        ]]>
+    </select>
+    
+     <select id="selectUserStop" parameterType="hashmap" resultType="hashmap">
+    	<![CDATA[
+            SELECT
+            	US_DAY,
+            	US_START_TIME,
+            	US_END_TIME
+            FROM
+                USERSTOP
+            WHERE
+            	US_ID = #{ID}
+        ]]>
+    </select>
+    
+     <select id="selectUserReport" parameterType="hashmap" resultType="hashmap">
+    	<![CDATA[
+            SELECT
+            	US_DAY,
+            	US_START_TIME,
+            	US_END_TIME
+            FROM
+                RPCOMPLETED
+            WHERE
+            	US_ID = #{ID}
+        ]]>
+    </select>
+</mapper>

@@ -78,6 +78,11 @@ public interface MovieService {
 
 	List<Map<String, Object>> selectUserBoard(Map<String, Object> commandMap);
 	
+	//제재 내용
+	Map<String, Object> selectUserStop(Map<String, Object> commandMap);
+
+	List<Map<String, Object>> selectUserReport(Map<String, Object> commandMap);
+	
 	
 
 	
