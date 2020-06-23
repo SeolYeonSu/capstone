@@ -224,34 +224,42 @@
 		  </div>
 		  <!-- Tab panes 2 end -->
 		  
-		  <!-- Tab panes 3 start --> <!--
+		  <!-- Tab panes 3 start --> 
 		  <div role="tabpanel" class="tab-pane fade" id="log">
 		  	<table class="table table-hover" style="text-align:left; border:1px solid #dddddd; margin-top:20px;"> 
 				<thead>
 					<tr>
-						<th style="background-color: #eeeeee; text-align: center; width: 13%;">번호</th>
-						<th style="background-color: #eeeeee; text-align: left; width: *;">제목</th>
-						<th style="background-color: #eeeeee; text-align: center; width: 15%;">조회수</th>
-						<th style="background-color: #eeeeee; text-align: center; width: 15%;">작성일</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">순번</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">관리자</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">처리시간</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">게시글 번호</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;">삭제 사유</th>
+						<th style="background-color: #eeeeee; text-align: center; width: 15%;"></th>
 					</tr>
 				</thead> 
 				<tbody>
 				<c:choose>
-			    <c:when test="${fn:length(userBoardList) > 0 }">
-			    	<c:forEach items="${userBoardList}" var="row">
+			    <c:when test="${fn:length(list3) > 0 }">
+			    	<c:forEach items="${list3}" var="row3">
 						<tr>
 							<td style="text-align: center;">
-								<c:out value="${row.IDX }"></c:out>
-							</td>
-							<td>
-								<a href="#" name="title"><c:out value="${row.TITLE}"></c:out></a>
-								<input type="hidden" id="IDX" value="${row.IDX }">
+								<h5><c:out value="${row3.AL_INDEX }"></c:out></h5>
 							</td>
 							<td style="text-align: center;">
-							 	<c:out value="${row.HIT_CNT }"></c:out>
+								<h5><c:out value="${row3.AL_ID }"></c:out></h5>
 							</td>
 							<td style="text-align: center;">
-							 	<c:out value="${row.CREA_DTM }"></c:out>
+							 	<h5><c:out value="${row3.AL_DATE }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+							 	<h5><c:out value="${row3.AL_IDX }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+							 	<h5><c:out value="${row3.AL_REASON }"></c:out></h5>
+							</td>
+							<td style="text-align: center;">
+								<button type="button" name="logBoard_btn" class="btn btn-default">게시글 보기</button>				
+								<input type="hidden" id="AL_IDX" name="AL_IDX" value="${row3.AL_IDX}">
 							</td>
 						</tr>
 					</c:forEach>
@@ -265,7 +273,27 @@
 				</c:choose>
 				</tbody>
 			</table>
-		  </div> -->
+			
+			<!-- 삭제 게시글 모달  -->
+			<div class="modal fade bs-logBoard-modal" id="logBoardModal" tabindex="-1" role="dialog" aria-labelledby="logBoardModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title">게시글 보기</h4>
+			      </div>
+			      
+			      <div class="modal-body" style="height: 430px;">
+			      	<div id="logBoardCon" style="height: 350px;"></div>
+			      <div class="modal-footer">
+			       	<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+			      </div>
+			    </div>
+			  </div>
+			 </div>
+			<!-- 삭제 게시글 모달 끝 -->
+			
+		  </div> 
 		  <!-- Tab panes 3 end -->
 		  
 		</div>
@@ -318,6 +346,11 @@ $(document).ready(function() {
 		   e.preventDefault();
 		   fn_RpComUpdate(selectIndex, selectIDX, selectAdmin, selectLoginid, selectStop);
 	
+	  });
+	 
+	 $('[name="logBoard_btn"]').unbind("click").click(function(e) {
+		   e.preventDefault();
+		   fn_openlogBoard($(this)); 		   
 	  });
 	 
 	 //페이지 새로고침 할때 활성화된 탭 유지
@@ -397,24 +430,18 @@ function fn_reportProcess(selectIDX, selectRID, selectReason) {
 	var deleteState;
 	var rpccheck = 0;
 	var checked = $('input:checkbox[id="checkDelete"]').is(":checked");
-	
 	if(checked == true) {
 		checkDelete = "O";
 		deleteState = "Y";
-		//rpccheck = 0;
 	}
 	else if(checked == false) {
 		checkDelete = "X";
 		deleteState = "N";
-		//rpccheck = 1;
 	}
-	
 	var checkStop = $('#checkStop option:selected').text();
-	
 	if(checkDelete == "X" && checkStop == "없음") {
 		rpccheck = 1;
 	}
-	
 	var adminId = $('#adminId').val();
 	
 	$('#reportBoardModal').modal('hide');
@@ -470,7 +497,6 @@ function fn_RpComUpdate(selectIndex, selectIDX, selectAdmin, selectLoginid, sele
 	var deleteState;
 	var rpccheck;
 	var checked = $('input:checkbox[id="checkDelete2"]').is(":checked");
-	
 	if(checked == true) {
 		checkDelete = "O";
 		deleteState = "Y";
@@ -482,19 +508,13 @@ function fn_RpComUpdate(selectIndex, selectIDX, selectAdmin, selectLoginid, sele
 		if(selectStop == "없음") rpccheck = 1;
 		else rpccheck = 0;
 	}
-	/*else if(checked == false && checkStop != "없음") {
-		checkDelete = "X";
-		deleteState = "N";
-		rpccheck = 0;
-	}
-	else if(checked == false && checkStop == "없음") {
-		checkDelete = "X";
-		deleteState = "N";
-		rpccheck = 1;
-	}*/
-	
-	
-	var listData = {"INDEX": selectIndex, "IDX": selectIDX, "CHECKDELETE": checkDelete, "DELETESTATE": deleteState, "RPCCHECK": rpccheck};
+	var listData = {
+			"INDEX": selectIndex, 
+			"IDX": selectIDX, 
+			"CHECKDELETE": checkDelete, 
+			"DELETESTATE": deleteState, 
+			"RPCCHECK": rpccheck
+			};
 	
 	if(selectAdmin == selectLoginid) {
 		$('#rpComBoardModal').modal('hide');
@@ -523,6 +543,34 @@ function fn_RpComUpdate(selectIndex, selectIDX, selectAdmin, selectLoginid, sele
 	}	 
 } 
 
+//로그 게시글 열기
+function fn_openlogBoard(obj) {
+	var idx = obj.parent().find("#AL_IDX").val();
+	var listData = {"IDX": idx};
+
+	 $.ajax({
+	  async:false,
+	  type : "POST", 
+	  url : "${pageContext.request.contextPath}/admin/openReportBoard.do", 
+	  data : listData,
+	  dataType : "json",
+	  error : function(error) {
+		    alert("서버가 응답하지 않습니다. \n다시 시도해주시기 바랍니다.");
+		   },
+	  success : function(data) {
+		  var text ="";
+		  $.each(data, function() {
+			  var title = "제목 : " + this.TITLE + "<br>";
+			  var contents = "내용 : " + this.CONTENTS;
+			  text += "<h4>" + title + contents + "</h4>";
+			});
+
+		  $("#logBoardCon").empty();
+	  	  $("#logBoardCon").append(text);  	    
+	   	  $('#logBoardModal').modal('show');	   	  
+	  }  
+	 });
+} 
 
 </script>
 

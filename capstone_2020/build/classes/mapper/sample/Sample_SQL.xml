@@ -133,5 +133,25 @@
 	    	US_ID = #{ID}
 	  ]]>
 	 </select>
+	 
+	 
+	 <insert id="insertAdminLog" parameterType="hashmap">
+	    <![CDATA[
+	        INSERT INTO ADMINLOG
+		        (
+				    AL_ID,
+				    AL_DATE,
+				    AL_IDX,
+				    AL_REASON
+		        )
+		        VALUES
+		        (
+		            #{ID},
+		            NOW(),
+		            #{IDX},
+		            #{REASON}
+		        )
+	    ]]>
+	 </insert>
 	
 </mapper>

@@ -141,19 +141,19 @@
 			    	<c:forEach items="${userReport}" var="row">
 						<tr>
 							<td style="text-align: center;">
-								<c:out value="${row.RPC_IDX }"></c:out>
+								<h5><c:out value="${row.RPC_IDX }"></c:out></h5>
 							</td>
 							<td style="text-align: center;">
-								<c:out value="${row.RPC_DATE}"></c:out>
+								<h5><c:out value="${row.RPC_DATE}"></c:out></h5>
 							</td>
 							<td style="text-align: center;">
-							 	<c:out value="${row.RPC_REASON }"></c:out>
+							 	<h5><c:out value="${row.RPC_REASON }"></c:out></h5>
 							</td>
 							<td style="text-align: center;">
-							 	<c:out value="${row.RPC_DELETE }"></c:out>
+							 	<h5><c:out value="${row.RPC_DELETE }"></c:out></h5>
 							</td>
 							<td style="text-align: center;">
-							 	<c:out value="${row.RPC_STOP }"></c:out>
+							 	<h5><c:out value="${row.RPC_STOP }"></c:out></h5>
 							</td>
 							<td style="text-align: center;">
 								<button type="button" name="RpBoard_btn" class="btn btn-default">게시글 보기</button>

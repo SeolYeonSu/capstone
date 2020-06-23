@@ -67,7 +67,7 @@
 			       	<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
 			       	<button type="button" id="delete" name = "delete" class="btn btn-danger">삭제하기</button>
 			       	<input type="hidden" id="ID" name="ID" value="${loginInfo.ID}">
-			       	<input type="hidden" id="CREA_ID" name="CREA_ID" value="${map.CREA_ID}">
+			       	<input type="hidden" id="ACC" name="ACC" value="${loginInfo.ACC}">	       	
 			       	<input type="hidden" id="IDX" name="IDX" value="${map.IDX}">
 			      </div>
 			    </div>
@@ -169,7 +169,10 @@
  function fn_deleteBoard() {
   var comSubmit = new ComSubmit();
   comSubmit.setUrl("<c:url value='/bbs/deleteBoard.do' />");
+  comSubmit.addParam("ACC", $("#ACC").val()); 
+  comSubmit.addParam("ID", $("#ID").val());
   comSubmit.addParam("IDX", $("#IDX").val());
+  comSubmit.addParam("REASON", $('input[name="RadioOptions"]:checked').val());
   comSubmit.submit();
  }
   

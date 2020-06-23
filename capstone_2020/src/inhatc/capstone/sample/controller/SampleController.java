@@ -102,8 +102,13 @@ public class SampleController {
    @RequestMapping(value="/bbs/deleteBoard.do")
    public ModelAndView deleteBoard(CommandMap commandMap) throws Exception{
        sampleService.deleteBoard(commandMap.getMap());
-    
        ModelAndView mv = new ModelAndView("redirect:/sample/openBoardList.do");
+       
+       if(commandMap.get("ACC").equals("admin")) {
+    	   //System.out.println("관리자 확인");
+    	   sampleService.insertAdminLog(commandMap.getMap());
+       }
+    	   
        return mv;
    }
    

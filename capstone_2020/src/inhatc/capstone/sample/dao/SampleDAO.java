@@ -54,6 +54,9 @@ public class SampleDAO extends AbstractDAO {
 	public Map<String, Object> selectUserStop(Map<String, Object> map) throws Exception{
 	    return (Map<String, Object>) selectOne("sample.selectUserStop", map);
 	}
-
+	
+	public void insertAdminLog(Map<String, Object> map) throws Exception{
+	    insert("sample.insertAdminLog", map);
+	}
 
 }

@@ -23,6 +23,12 @@ public class AdminDAO extends AbstractDAO {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> selectLogList(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		return (List<Map<String, Object>>)selectList("admin.selectLogList", map);
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> selectUserList(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
 		return (List<Map<String, Object>>)selectList("admin.selectUserList", map);

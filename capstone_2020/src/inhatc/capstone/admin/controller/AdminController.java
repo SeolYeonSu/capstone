@@ -24,9 +24,11 @@ public class AdminController {
    public ModelAndView openAdmin(Map<String,Object> commandMap) throws Exception{
 	   List<Map<String,Object>> list = adminService.selectReportList(commandMap);
 	   List<Map<String,Object>> list2 = adminService.selectRpComList(commandMap);
+	   List<Map<String,Object>> list3 = adminService.selectLogList(commandMap);
 	   ModelAndView mv = new ModelAndView("/admin/admin");
 	   mv.addObject("list", list);
 	   mv.addObject("list2", list2);
+	   mv.addObject("list3", list3);
 	   return mv;
    }
    

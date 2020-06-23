@@ -20,4 +20,6 @@ public interface SampleService {
 	int selectReportCheck(Map<String, Object> map) throws Exception;
 	
 	Map<String, Object> selectUserStop(Map<String, Object> map) throws Exception;
+	
+	void insertAdminLog(Map<String, Object> map) throws Exception;
 }

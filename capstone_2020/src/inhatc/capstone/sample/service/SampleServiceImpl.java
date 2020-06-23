@@ -61,4 +61,10 @@ public class SampleServiceImpl implements SampleService{
 	    return resultMap;
 	}
 
+	@Override
+	public void insertAdminLog(Map<String, Object> map) throws Exception {
+		sampleDAO.insertAdminLog(map);
+		
+	}
+
 }

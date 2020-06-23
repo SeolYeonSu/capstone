@@ -29,6 +29,11 @@ public class AdminServiceImpl implements AdminService{
 	}
 	
 	@Override
+	public List<Map<String, Object>> selectLogList(Map<String, Object> map) throws Exception {		
+		return adminDAO.selectLogList(map);
+	}
+	
+	@Override
 	public List<Map<String, Object>> selectUserList(Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
 		return adminDAO.selectUserList(map);
