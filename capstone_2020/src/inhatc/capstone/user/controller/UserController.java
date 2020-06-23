@@ -180,7 +180,13 @@ public class UserController {
 				 				 
 				 select_end = df.format(cal.getTime()).toString();								// 계산한 시간을 string으로 형변환 
 				 commandMap.put("END", select_end);												// 맵에 추가
-				 userService.updateUsEnd(commandMap.getMap());                                  // 활동정지 종료 시간 업데이트				 
+				 userService.updateUsEnd(commandMap.getMap());                                  // 활동정지 종료 시간 업데이트	
+				 
+				 Calendar cal_now = Calendar.getInstance();										// 현재시간
+				 if(cal_now.compareTo(cal) == 1) {												// 현재시간과 종료시간 비교 시 현재시간이 더 클 경우
+					 userService.deleteUserStop(commandMap.getMap());							// 활동정지 종료
+				 }
+				 
 	    	 }
 			 return checkResult;															  	// 안내 여부를 리턴함, checkResult이 1 이상이면 안내함, 0 이면 안내하지 않음
 		 }

@@ -18,4 +18,6 @@ public interface SampleService {
 	void reportBoard(Map<String, Object> map) throws Exception;
 	
 	int selectReportCheck(Map<String, Object> map) throws Exception;
+	
+	Map<String, Object> selectUserStop(Map<String, Object> map) throws Exception;
 }

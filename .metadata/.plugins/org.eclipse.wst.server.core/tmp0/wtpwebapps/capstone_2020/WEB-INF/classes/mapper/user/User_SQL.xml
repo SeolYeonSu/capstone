@@ -97,4 +97,12 @@
     ]]>
  </update>
  
+ <delete id="deleteUserStop" parameterType="hashmap">
+    <![CDATA[
+        DELETE FROM 
+        	USERSTOP
+        WHERE
+            US_ID = #{ID}
+    ]]>
+ </delete>
 </mapper>

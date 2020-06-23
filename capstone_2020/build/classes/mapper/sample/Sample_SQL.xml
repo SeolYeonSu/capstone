@@ -123,4 +123,15 @@
 	    ]]>
 	</select>
 	
+	<select id="selectUserStop" parameterType="HashMap" resultType="HashMap">
+	  <![CDATA[
+	  	SELECT
+	  		US_INDEX, US_ID, US_DAY, US_START_TIME, US_END_TIME
+	    FROM 
+	   		USERSTOP
+	    WHERE 
+	    	US_ID = #{ID}
+	  ]]>
+	 </select>
+	
 </mapper>

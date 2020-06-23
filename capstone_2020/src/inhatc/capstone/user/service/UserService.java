@@ -15,4 +15,5 @@ public interface UserService {
 	Map<String, Object> selectUserStop(Map<String, Object> map) throws Exception;
 	void updateUsStart(Map<String, Object> map) throws Exception;
 	void updateUsEnd(Map<String, Object> map) throws Exception;
+	void deleteUserStop(Map<String, Object> map) throws Exception;
 }

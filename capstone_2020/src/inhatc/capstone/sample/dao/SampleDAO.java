@@ -49,6 +49,11 @@ public class SampleDAO extends AbstractDAO {
 	  
 	  return result;
 	 }
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> selectUserStop(Map<String, Object> map) throws Exception{
+	    return (Map<String, Object>) selectOne("sample.selectUserStop", map);
+	}
 
 
 }

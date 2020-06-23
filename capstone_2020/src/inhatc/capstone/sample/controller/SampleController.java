@@ -30,26 +30,52 @@ public class SampleController {
     
    @RequestMapping(value="/bbs/openBoardWrite.do")
    public ModelAndView openBoardWrite(CommandMap commandMap) throws Exception{
+	   
+	   ModelAndView mv = null;
+	   
+	   Map<String,Object> result_map = sampleService.selectUserStop(commandMap.getMap());
+	   
+	   if(result_map == null) {
+	       mv = new ModelAndView("/sample/boardWrite");	   
+	   }
+	   
+	   else {
+		   mv = new ModelAndView("/popup");
+	       mv.addObject("msg", "현재 회원님은 활동정지 상태입니다.");
+	       mv.addObject("loc", "/sample/openBoardList.do");
+	   }	
+	   
+       return mv;
 
-	    ModelAndView mv = new ModelAndView("/sample/boardWrite");
-	    return mv;
 	}
    
    @RequestMapping(value="/bbs/insertBoard.do")
    public ModelAndView insertBoard(CommandMap commandMap) throws Exception{
-       sampleService.insertBoard(commandMap.getMap());
+	   
+	   sampleService.insertBoard(commandMap.getMap());
        ModelAndView mv = new ModelAndView("redirect:/sample/openBoardList.do"); 
        return mv;
    }
    
    @RequestMapping(value="/bbs/openBoardDetail.do")
-   public ModelAndView openBoardDetail(CommandMap commandMap) throws Exception{
-       Map<String,Object> map = sampleService.selectBoardDetail(commandMap.getMap());
-    
-       ModelAndView mv = new ModelAndView("/sample/boardDetail");
-       mv.addObject("map", map);
-       
-    
+   public ModelAndView openBoardDetail(CommandMap commandMap) throws Exception{   
+	   
+	   ModelAndView mv = null;
+	   
+	   Map<String,Object> result_map = sampleService.selectUserStop(commandMap.getMap());
+	   Map<String,Object> map = sampleService.selectBoardDetail(commandMap.getMap());
+	   
+	   if(result_map == null) {
+	       mv = new ModelAndView("/sample/boardDetail");
+	       mv.addObject("map", map);	   
+	   }
+	   
+	   else {
+		   mv = new ModelAndView("/popup");
+	       mv.addObject("msg", "현재 회원님은 활동정지 상태입니다.");
+	       mv.addObject("loc", "/sample/openBoardList.do");
+	   }	
+	   
        return mv;
    }
 

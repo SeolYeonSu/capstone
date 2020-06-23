@@ -61,4 +61,11 @@ public class UserServiceImpl implements UserService{
 		userDAO.updateUsEnd(map);
 	}
 
+	@Override
+	public void deleteUserStop(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		userDAO.deleteUserStop(map);
+		
+	}
+
 }

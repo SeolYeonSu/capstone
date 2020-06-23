@@ -55,4 +55,10 @@ public class SampleServiceImpl implements SampleService{
 		return sampleDAO.selectReportCheck(map);
 	}
 
+	@Override
+	public Map<String, Object> selectUserStop(Map<String, Object> map) throws Exception {
+		Map<String, Object> resultMap = sampleDAO.selectUserStop(map);
+	    return resultMap;
+	}
+
 }

@@ -169,7 +169,10 @@
  function fn_deleteBoard() {
   var comSubmit = new ComSubmit();
   comSubmit.setUrl("<c:url value='/bbs/deleteBoard.do' />");
+  comSubmit.addParam("ID", $("#ID").val()); 
+  comSubmit.addParam("CREA_ID", $("#CREA_ID").val());
   comSubmit.addParam("IDX", $("#IDX").val());
+  comSubmit.addParam("REASON", $('input[name="RadioOptions"]:checked').val());
   comSubmit.submit();
  }
   

@@ -56,4 +56,9 @@ public class UserDAO extends AbstractDAO{
 		// TODO Auto-generated method stub
 		update("user.updateUsEnd", map);
 	}
+	
+	public void deleteUserStop(Map<String, Object> map) throws Exception {
+		// TODO Auto-generated method stub
+		update("user.deleteUserStop", map);
+	}
 }

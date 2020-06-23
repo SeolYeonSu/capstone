@@ -75,6 +75,7 @@
   function fn_openBoardWrite() {
    var comSubmit = new ComSubmit();
    comSubmit.setUrl("<c:url value='/bbs/openBoardWrite.do' />");
+   comSubmit.addParam("ID", $("#header_id").val());
    comSubmit.submit();
   }
   
@@ -82,6 +83,7 @@
    var comSubmit = new ComSubmit();
    comSubmit.setUrl("<c:url value='/bbs/openBoardDetail.do' />");
    comSubmit.addParam("IDX", obj.parent().find("#IDX").val());
+   comSubmit.addParam("ID", $("#header_id").val());
    comSubmit.submit();
   }
  </script>
